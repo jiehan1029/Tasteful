@@ -37,7 +37,7 @@ UserSchema.statics.hashPassword = function(password) {
   return bcrypt.hash(password, 10);
 };
 
-// link to the 'User' collection in the database
-const Users = mongoose.model('Users', UserSchema);
+// link to the 'user' collection in the database
+const Users = mongoose.model('users', UserSchema);
 
 module.exports = {Users};

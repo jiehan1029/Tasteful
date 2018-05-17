@@ -10,6 +10,8 @@ const passport = require('passport');
 // will have two router modules with the same name (router) but in different path (/auth and /users), so rename them when importing to server.js using destructuring assignment
 const { router: usersRouter } = require('./users');
 const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
+const { router: recipesRouter } = require('./recipes');
+const { router: recipeBooksRouter} = require('./recipe-books');
 
 mongoose.Promise = global.Promise;
 
@@ -39,17 +41,15 @@ passport.use(jwtStrategy);
 app.use('/users/', usersRouter);
 // given username & password, create credential (JWT) that can be used to access protected resources in the server, i.e., the '/api/protected' path in this case
 app.use('/auth/', authRouter);
+// call 3rd party api to search recipes
+app.use('/recipes/', recipesRouter);
 
 // { session: false } is to prevent CSRF attacks
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
 // A protected endpoint which needs a valid JWT to access it
-app.get('/recipe-books/', jwtAuth, (req, res) => {
-  // return whatever should be accessible to a user with valid credential
-  return res.json({
-    data: 'inside recipe books page'
-  });
-});
+app.use('/recipe-books/', jwtAuth, recipeBooksRouter);
+
 
 // add other routers as needed
 
