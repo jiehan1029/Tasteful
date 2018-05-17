@@ -2,6 +2,8 @@
 
 const mongoose = require('mongoose');
 
+mongoose.Promise = global.Promise;
+
 const recipeBooksSchema = mongoose.Schema({
   user:{type:String, required:true},
   name: {type: String, required: true, unique: true},
