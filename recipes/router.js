@@ -7,7 +7,7 @@ const request=require('request-promise');
 
 router.use(express.json());
 
-function GetFoodApi(req,res){
+function GetRecipesFromApi(req,res){
   const options={
     method:'GET',
     url:'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/searchComplex',
@@ -33,8 +33,8 @@ function GetFoodApi(req,res){
   }
 
   request(options)
-    .then(function(response){
-      return response.results;
+    .then(function(apiResponse){
+      return apiResponse.results;
     })
     .then(function(data){
       res.json(data);
@@ -42,6 +42,32 @@ function GetFoodApi(req,res){
     .catch(function(err){
       console.error(err);
     });
+
+}
+
+function GetRecipeInfoFromApi(req,res){
+
+  let recipeId=req.params.id;
+  let recipeObj={};
+
+  recipeObj.id=recipeId;
+
+  const options={
+    method:"get",
+    url:`https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/${recipeId}/information`,
+    headers:{
+      'X-Mashape-Key':'t9elQM8DjDmshmCoAMsWUcNZoMS6p1qZ5zzjsnOFwa9qrvfmIJ'
+    },
+    qs:{
+      stepBreakdown:true
+    },
+    json:true
+  }
+
+  request(options)
+    .then(function(apiResponse){
+      res.json(apiResponse.results);
+    })
 
 }
 
@@ -55,7 +81,12 @@ function GetFoodApi(req,res){
   query:''
 } */
 router.get('/', (req, res) => {
-  GetFoodApi(req,res);
+  GetRecipesFromApi(req,res);
+});
+
+// get recipe details by recipe id
+router.get('/:id',(req,res)=>{
+  GetRecipeInfoFromApi(req,res)
 });
 
 module.exports = {router};

@@ -1,3 +1,6 @@
+
+// pending update: whether or not add recipe object into schema?
+
 'use strict';
 
 const mongoose = require('mongoose');
@@ -8,6 +11,7 @@ const recipeBooksSchema = mongoose.Schema({
   user:{type:String, required:true},
   name: {type: String, required: true, unique: true},
   description: {type: String},
+  numberOfRecipes:{type:Number, required:true},
   recipes:[{
     id: {type:Number, required:true},
     title: {type:String,required:true},
@@ -23,10 +27,10 @@ const recipeBooksSchema = mongoose.Schema({
   }]
 });
 
-/*
-recipeBooksSchema.recipes.virtual('readyIn').get(function() {
-  return `${this.cookTime.number} ${this.cookTime.timeUnit}`.trim()
-}); */
+
+recipeBooksSchema.virtual('contains').get(function() {
+  return `${this.numberOfRecipes} recipes`
+}); 
 
 // this is an *instance method* which will be available on all instances of the model. Put whatever data you'd like to expose to users and leave out credentials such as username and password outside the serialize so that user won't have access to it.
 recipeBooksSchema.methods.serialize = function() {
@@ -34,7 +38,8 @@ recipeBooksSchema.methods.serialize = function() {
     id: this._id,
     name: this.name,
     description: this.description,
-    recipes: this.recipes
+    recipes: this.recipes,
+    contains:this.contains
   };
 }
 
