@@ -8,10 +8,10 @@ const morgan = require('morgan');
 const passport = require('passport');
 
 // will have two router modules with the same name (router) but in different path (/auth and /users), so rename them when importing to server.js using destructuring assignment
-const { router: usersRouter } = require('./users');
-const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
-const { router: recipesRouter } = require('./recipes');
-const { router: recipeBooksRouter} = require('./recipe-books');
+const { router: usersRouter } = require('./routes/users');
+const { router: authRouter, localStrategy, jwtStrategy } = require('./routes/auth');
+const { router: recipesRouter } = require('./routes/recipes');
+const { router: recipeBooksRouter} = require('./routes/recipe-books');
 
 mongoose.Promise = global.Promise;
 
@@ -49,7 +49,6 @@ const jwtAuth = passport.authenticate('jwt', { session: false });
 
 // A protected endpoint which needs a valid JWT to access it
 app.use('/recipe-books/', jwtAuth, recipeBooksRouter);
-//app.use('/recipe-books',recipeBooksRouter);
 
 // add other routers as needed
 
