@@ -23,10 +23,10 @@ function GetRecipesFromApi(req,res){
       offset:0, // # of results to skip
       ranking:2, // rank recipes by relevance
 
-      includeIngredients:req.body.ingredients,
-      intolerances:req.body.intolerances,
-      cuisine:req.body.cuisine,
-      query:req.body.query
+      includeIngredients:req.query.ingredients,
+      intolerances:req.query.intolerances,
+      cuisine:req.query.cuisine,
+      query:req.query.query
 
     },
     json:true
@@ -37,20 +37,19 @@ function GetRecipesFromApi(req,res){
       return apiResponse.results;
     })
     .then(function(data){
-      res.json(data);
+      res.status(200).json(data);
     })
     .catch(function(err){
       console.error(err);
     });
-
 }
 
 function GetRecipeInfoFromApi(req,res){
 
-  let recipeId=req.params.id;
-  let recipeObj={};
+  let recipeId=req.query.apiId;
 
-  recipeObj.id=recipeId;
+  //let recipeObj={};
+  //recipeObj.apiId=recipeId;
 
   const options={
     method:"get",
@@ -58,35 +57,41 @@ function GetRecipeInfoFromApi(req,res){
     headers:{
       'X-Mashape-Key':'t9elQM8DjDmshmCoAMsWUcNZoMS6p1qZ5zzjsnOFwa9qrvfmIJ'
     },
-    qs:{
-      stepBreakdown:true
-    },
     json:true
   }
 
   request(options)
     .then(function(apiResponse){
-      res.json(apiResponse.results);
+      res.json(apiResponse);
     })
 
 }
 
 // GET method
 // GET 'Spoonacular Search Recipes Complex' endpoint
-// if no request.body found, will return random recipes. otherwise return search results
-/* request.body = {
+// if no request.query.apiId found, will return random recipes. otherwise return search results
+/* request.query = {
+  apiId: ,
   ingredients:'',    // comma separated string
   intolerances:'',
   cuisine:'',
   query:''
 } */
 router.get('/', (req, res) => {
-  GetRecipesFromApi(req,res);
+
+  if(!req.query.apiId){
+    GetRecipesFromApi(req,res);
+  }else{
+    GetRecipeInfoFromApi(req,res)
+  }
+
+  
 });
 
-// get recipe details by recipe id
-router.get('/:id',(req,res)=>{
+/*
+// get recipe details by recipe apiId
+router.get('/',(req,res)=>{
   GetRecipeInfoFromApi(req,res)
-});
+}); */
 
 module.exports = {router};
