@@ -4,8 +4,10 @@
 const express = require('express');
 const router = express.Router();
 const request=require('request-promise');
+const bodyParser=require('body-parser');
 
-router.use(express.json());
+router.use(bodyParser.urlencoded({extended:true}));
+router.use(bodyParser.json());
 
 function GetRecipesFromApi(req,res){
   const options={
@@ -77,21 +79,24 @@ function GetRecipeInfoFromApi(req,res){
   cuisine:'',
   query:''
 } */
-router.get('/', (req, res) => {
 
-  if(!req.query.apiId){
+
+router.post('/', (req, res) => {
+  // console.log(req.body);
+  GetRecipesFromApi(req,res);
+  /*
+  if(!req.body.apiId){
     GetRecipesFromApi(req,res);
   }else{
     GetRecipeInfoFromApi(req,res)
-  }
-
-  
+  } */
 });
 
-/*
-// get recipe details by recipe apiId
-router.get('/',(req,res)=>{
-  GetRecipeInfoFromApi(req,res)
-}); */
+
+router.post('/details/:apiId',(req,res)=>{
+  const {apiId}=req.params;
+  GetRecipeInfoFromApi(req,res);
+});
+
 
 module.exports = {router};

@@ -1,17 +1,19 @@
-
-
 'use strict';
+
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const passport = require('passport');
+const path=require('path');
+const hbs=require('express-handlebars');
 
 // will have two router modules with the same name (router) but in different path (/auth and /users), so rename them when importing to server.js using destructuring assignment
 const { router: usersRouter } = require('./routes/users');
 const { router: authRouter, localStrategy, jwtStrategy } = require('./routes/auth');
 const { router: recipesRouter } = require('./routes/recipes');
 const { router: recipeBooksRouter} = require('./routes/recipe-books');
+const { router: indexRouter} = require('./routes/index');
 
 mongoose.Promise = global.Promise;
 
@@ -36,6 +38,17 @@ app.use(function (req, res, next) {
 // this is to register the strategies so that can be used in authentication ('/auth/router.js')
 passport.use(localStrategy);
 passport.use(jwtStrategy);
+
+// serve static asset
+// app.use(express.static('public'));
+
+// load view engine
+app.engine('hbs',hbs({extname:'hbs',defaultLayout:'layout',layoutsDir:__dirname+'/views/layouts/'}));
+app.set('views',path.join(__dirname,'views'));
+app.set('view engine','hbs');
+
+// serve index page
+app.get('/', indexRouter);
 
 // to create user account (no credential is needed nor created at this step)
 app.use('/users/', usersRouter);

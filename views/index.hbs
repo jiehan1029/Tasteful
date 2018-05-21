@@ -1,0 +1,13 @@
+<h1>{{ title }}</h1>
+<p>You are what you eat</p>
+
+{{# if condition }}
+	condition is met
+{{ else }}
+	condition not met
+{{/if}}
+
+{{# each anyArray as |value key| }}
+	{{ this }}
+	{{ key }}:{{ val }}
+{{/each}}
