@@ -1,3 +1,41 @@
+<header>
+	<h1>{{ hbs-page-title }}</h1>
+</header>
+
+<main>
+
+	<form method='POST' action='/recipes'>
+		<label>Search text</label>
+		<input type='text' placeholder="ingredients or recipe name" name='query'>
+		<select name='cuisine'>
+			<option value='asian'>Asian</option>
+			<option value='italian'>Italian</option>
+			<option value='american'>American</option>
+		</select>
+		<input type='text' placeholder="included ingredients" name='ingredients'>
+	<input type='text' placeholder="intolerances" name='intolerances'>
+	<button type="submit">Search</button>
+	</form>
+	
+	<section class='searchSummary'>
+		<p>{{ hbs-search-summary }}</p>
+	</section>
+
+	<section class='searchResults'>
+	
+		{{{ hbs-search-results }}}
+	</section>
+	
+</main>
+<footer></footer>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script type="text/javascript" src='./index.js'></script>
+
+
+
+
+
 <h1>{{ title }}</h1>
 <p>You are what you eat</p>
 
