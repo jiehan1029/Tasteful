@@ -3,12 +3,14 @@
 <head>
 <title>index page</title>
 <link rel='stylesheet' href='./index.css'>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js'></script>
 </head>
 <body>
+	<script id='header' type='text/x-handlebars-template'>
 	<header>
-		<h1>Recipe book app</h1>
+		<h1>{{pageTitle}}</h1>
 	</header>
-
+    </script>
 	<main>
 		<form method='POST' action='/recipes'>
 			<label>Search text</label>
@@ -23,9 +25,11 @@
 			<button type="submit">Search</button>
 		</form>
 
+		<script id="hbs-searchSummary" type="text/x-handlebars-template">
 		<section class='searchSummary'>
-			<p>Found recipes......</p>
+			<p>{{hbsSearchSummaryText}}</p>
 		</section>
+		</script>
 
 		<section class='searchResults'></section>
 	</main>

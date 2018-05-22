@@ -40,10 +40,10 @@ passport.use(localStrategy);
 passport.use(jwtStrategy);
 
 // serve static asset
-// app.use(express.static('public'));
+//app.use(express.static('public'));
 
 // load view engine
-app.engine('hbs',hbs({extname:'hbs',defaultLayout:'layout',layoutsDir:__dirname+'/views/layouts/'}));
+app.engine('hbs',hbs({extname:'hbs',defaultLayout:'layout',layoutsDir:__dirname+'/views/layouts'}));
 app.set('views',path.join(__dirname,'views'));
 app.set('view engine','hbs');
 
