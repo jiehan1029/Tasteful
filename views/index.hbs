@@ -1,20 +1,17 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>index page</title>
+<title>Tasteful</title>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+<link rel="stylesheet" href='https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.css'>
 <link rel="stylesheet" href='./index.css'>
-<!--
-<link  href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.css" rel="stylesheet">
--->
 </head>
 <body>
 
 	<header class='container-fluid'>
-		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<nav class="navbar navbar-expand navbar-light bg-light col-md-10 offset-md-1">
 		  <div class="collapse navbar-collapse">
-		    <ul class="navbar-nav">
+		    <ul class="navbar-nav ml-auto">
 		      <li class="nav-item">
 		        <a class="nav-link" href="#">Login/Signup</a>
 		      </li>
@@ -26,13 +23,13 @@
 		</nav>
 
 		<h1 class='h1 text-center'>{{pageTitle}}</h1>
-		<p class='lead text-center'>Create. Enjoy. Share.</p>
+		<p class='lead text-center'>Make. Enjoy. Share.</p>
 	</header>
 
 	<main class='container-fluid'>
 
 		<form method='POST' action='/recipes' class='row col-12 col-md-10 offset-md-1'>
-			<label for='recipeSearchBox' class='col-12'>Get something tastful</label>
+			<label for='recipeSearchBox' class='col-12 font-italic'>Find something tastful</label>
 			<input id='recipeSearchBox' class="form-control col-xs-12 col-md-6" type='text' placeholder="cinnamon apple cake" name='query'>
 			<div class='row col-xs-12 col-md-4'>
 			<select class="form-control col" name='cuisine'>
@@ -77,128 +74,32 @@
 		<section class='searchResults row align-center col-12 col-md-10 offset-md-1'>
 			{{#if searchDone}}
 				{{#each searchResults}}
-				<div class="card align-center col-12 col-sm-6 col-md-4 col-lg-3 " style="width: 18rem;">
-				  <img class="card-img-top" src="https://spoonacular.com/recipeImages/{{image}}" alt="{{title}}">
+				<div class="card align-center col-12 col-sm-6 col-md-4 col-lg-3 " style="width: 18rem;" data-recipeApiId={{id}}>
+				  <img class="card-img-top" src="https://spoonacular.com/recipeImages/{{image}}" alt="photo of {{title}}">
 				  <div class="card-body">
-				    <h5 class="card-title">{{title}}</h5>
+				    <p class="card-title h5">{{title}}</p>
 				    <p class="card-text">Ready in {{readyInMinutes}} minutes</p>
-				    <p>Servings {{servings}} people</p>
-				    <a class="btn btn-primary">Instructions</a>
+				    <p>Serves {{servings}} people</p>
 				  </div>
 				</div>
-
 				{{/each}}
 			{{/if}}
-		</section>
+		</section>		
 		
+		<!--  -->
+		<div id='lightbox-container'></div>
 
-
-
-
-
-<!--
-		<section id='fb-recipeDetails' style='display:none'></section>
--->
 	</main>
 	<footer></footer>
 
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>	
-
-<!--	
-	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.js"></script>
-	
-	<script>
-
-	$('.searchResults').on('click','a',function(e){	
-		e.stopPropagation();
-		let recipeId=$(e.target).parent().attr('data-recipeId');
-		const options={
-			url:'/recipes/details',
-			data:{recipeApiId:recipeId},
-			type:'post',
-			success:function(data){
-				let detailsHtml=
-					`<h3 class='recipeName'>${data.title}</h3>
-					<div><img alt=${data.title} src=${data.image}></div>
-					<div>YIELD: ${data.servings} servings</div>
-					<div>Ready in ${data.readyInMinutes} minutes</div>
-					<div>
-						<h3>Ingredients</h3>
-						<ul>
-							{{#each extendedIngredients}}
-							<li>{{originalString}}</li>
-							{{/each}}
-						</ul>
-					</div>
-					<div>
-						<h3>Instructions</h3>
-						${data.instructions}
-					</div>`;
-
-				$('#fb-recipeDetails').html(detailsHtml);
-				$(e.target).parent().trigger('click');
-			}
-		};
-		$.ajax(options);
-	});
-
-	</script>
--->
+	<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.js'></script>
+	<script src='./index.js'></script>
 </body>
 </html>
-=======
-<header>
-	<h1>{{ hbs-page-title }}</h1>
-</header>
 
-<main>
-
-	<form method='POST' action='/recipes'>
-		<label>Search text</label>
-		<input type='text' placeholder="ingredients or recipe name" name='query'>
-		<select name='cuisine'>
-			<option value='asian'>Asian</option>
-			<option value='italian'>Italian</option>
-			<option value='american'>American</option>
-		</select>
-		<input type='text' placeholder="included ingredients" name='ingredients'>
-	<input type='text' placeholder="intolerances" name='intolerances'>
-	<button type="submit">Search</button>
-	</form>
-	
-	<section class='searchSummary'>
-		<p>{{ hbs-search-summary }}</p>
-	</section>
-
-	<section class='searchResults'>
-	
-		{{{ hbs-search-results }}}
-	</section>
-	
-</main>
-<footer></footer>
-
-<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<script type="text/javascript" src='./index.js'></script>
-
-
-
-
-
-<h1>{{ title }}</h1>
-<p>You are what you eat</p>
-
-{{# if condition }}
-	condition is met
-{{ else }}
-	condition not met
-{{/if}}
-
-{{# each anyArray as |value key| }}
-	{{ this }}
-	{{ key }}:{{ val }}
-{{/each}}
->>>>>>> 011addd7d6ca1ab173368ec848a94bffe0fbd6ce

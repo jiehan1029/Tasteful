@@ -12,7 +12,7 @@ router.use(bodyParser.json());
 // globals
 let searchResultsData;
 
-// searchComplex endpoint
+// search - search recipe endpoint
 function GetRecipesFromApi(req,res){
   const options={
     method:'GET',
@@ -40,7 +40,7 @@ function GetRecipesFromApi(req,res){
       searchResultsData=data;
       let hbsObj={
             pageTitle:'Tasteful',
-            searchSummary:'Found relevant recipes as follows',
+            searchSummary:'Found relevant recipes...',
             searchDone:true,
             searchResults:data,
             layout:false
@@ -53,8 +53,9 @@ function GetRecipesFromApi(req,res){
     });
 }
 
+// data - recipe information endpoint
 function GetRecipeInfoFromApi(req,res){
-  let recipeId=req.body.recipeApiId;
+  let recipeId=req.query.recipeApiId;
   const options={
     method:"get",
     url:`https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/${recipeId}/information`,
@@ -83,8 +84,8 @@ function GetRecipeInfoFromApi(req,res){
             }
           };
       //console.log(hbsRecipeDetailsObj);
-
       const sentData={
+              recipeApiId:data.id,
               title:data.title,
               image:data.image,
               servings:data.servings,
@@ -94,7 +95,6 @@ function GetRecipeInfoFromApi(req,res){
             }
 
       res.status(200).json(sentData);
-      //res.status(200).render('index',hbsRecipeDetailsObj);
     })
     .catch(function(err){
       console.error(err);
@@ -102,13 +102,14 @@ function GetRecipeInfoFromApi(req,res){
     });
 }
 
-// GET method
-// GET 'Spoonacular Search Recipes by natural language' endpoint
+// POST method - user submits a form to server
+// search 'Spoonacular Search Recipes by natural language' endpoint
 router.post('/',(req, res) => {
   GetRecipesFromApi(req,res);
 });
 
-router.post('/details',(req,res)=>{
+// GET method - user tries to fetch details of a recipe
+router.get('/details',(req,res)=>{
   GetRecipeInfoFromApi(req,res);
 });
 
