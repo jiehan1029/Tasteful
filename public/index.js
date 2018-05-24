@@ -202,6 +202,7 @@ $('.recipebookLink').click(function(e){
 		cache:true,
 		beforeSend: function(xhr){
 			xhr.withCredentials = true;
+			xhr.setRequestHeader("Authorization", 'Bearer '+ cookies.get('userSession').auth);
 		},
 	};
 	$.ajax(options)
