@@ -49,7 +49,6 @@ app.set('view engine','hbs');
 
 // serve index page
 app.get('/', indexRouter);
-
 // to create user account (no credential is needed nor created at this step)
 app.use('/users/', usersRouter);
 // given username & password, create credential (JWT) that can be used to access protected resources in the server, i.e., the '/api/protected' path in this case

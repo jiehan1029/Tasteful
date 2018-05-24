@@ -24,8 +24,10 @@ const localAuth = passport.authenticate('local', {session: false});
 router.use(bodyParser.json());
 // The user provides a username and password to login
 router.post('/login', localAuth, (req, res) => {
-  const authToken = createAuthToken(req.user.serialize());
-  res.json({authToken});
+	console.log('request body to auth login is ')
+	console.log(req.body);
+	const authToken = createAuthToken(req.user.serialize());
+    res.json({authToken});
 });
 
 // similarly, the strategy needs to be defined and registered
@@ -33,8 +35,8 @@ const jwtAuth = passport.authenticate('jwt', {session: false});
 
 // The user exchanges a valid JWT for a new one with a later expiration
 router.post('/refresh', jwtAuth, (req, res) => {
-  const authToken = createAuthToken(req.user);
-  res.json({authToken});
+    const authToken = createAuthToken(req.user);
+    res.json({authToken});
 });
 
 module.exports = {router};

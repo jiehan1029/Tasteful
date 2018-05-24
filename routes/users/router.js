@@ -24,7 +24,6 @@ const router = express.Router();
 
 // Post to register a new user
 router.post('/', jsonParser, (req, res) => {
-
   // check requiredFields exist. (user's registration form may contain several fields, and only certain fields are definitely required)
   const requiredFields = ['username', 'password'];
   const missingField = requiredFields.find(field => !(field in req.body));
@@ -71,7 +70,7 @@ router.post('/', jsonParser, (req, res) => {
       min: 1
     },
     password: {
-      min: 10,
+      min: 6,
       // bcrypt truncates after 72 characters, so let's not give the illusion
       // of security by storing extra (unused) info
       max: 72
@@ -139,7 +138,6 @@ router.post('/', jsonParser, (req, res) => {
 });
 
 // Never expose all your users like below in a prod application we're just doing this so we have a quick way to see if we're creating users. keep in mind, you can also verify this in the Mongo shell.
-
 router.get('/', (req, res) => {
   return Users.find()
     .then(users => res.json(users.map(user => user.serialize())))
