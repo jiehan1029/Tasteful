@@ -39,7 +39,6 @@ function GetRecipesFromApi(req,res){
     .then(function(data){
       searchResultsData=data;
       let hbsObj={
-            pageTitle:'Tasteful',
             searchSummary:'Found relevant recipes...',
             searchDone:true,
             searchResults:data,
@@ -69,7 +68,6 @@ function GetRecipeInfoFromApi(req,res){
   request(options)
     .then(function(data){
       let hbsRecipeDetailsObj={
-            pageTitle:'Tasteful',
             searchSummary:'Found recipes...',
             searchDone:true,
             searchResults:searchResultsData,
