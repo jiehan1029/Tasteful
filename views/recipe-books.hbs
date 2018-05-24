@@ -27,32 +27,40 @@
 		  </div>
 		</nav>
 
-		<h1 class='h1 text-center'>{{pageTitle}}</h1>
+		<h1 class='h1 text-center'>Tasteful</h1>
 		<p class='lead text-center'>Make. Enjoy. Share.</p>
 	</header>
 
 	<main class='container-fluid'>
+    <header class="row text-center">
+      <h1 class="h2">My Recipe Books</h1>
+    <header>
 
 		<section class='booksSummary row col-12 col-md-10 offset-md-1 text-left'>
 			<p>{{booksSummary}}</p>
 		</section>
 		
 		<section class='booksResults row align-center col-12 col-md-10 offset-md-1'>
-			{{#if booksDone}}
-				{{#each booksResults}}
+				{{#each recipeBooks}}
 				<div class="card align-center col-12 col-sm-6 col-md-4 col-lg-3 " style="width: 18rem;" data-recipeApiId={{id}}>
-				  <img class="card-img-top" src="https://spoonacular.com/recipeImages/{{image}}" alt="photo of {{title}}">
+				  <img class="card-img-top" src="http://res.cloudinary.com/rollercoaster/image/upload/v1527180406/193308-OXWPEW-70_1_1.jpg" alt="recipe book cover photo">
 				  <div class="card-body">
 				    <p class="card-title h5">{{title}}</p>
-				    <p class="card-text">Ready in {{readyInMinutes}} minutes</p>
-				    <p>Serves {{servings}} people</p>
+				    <p class="card-text">contains {{contains}} recipes</p>
+				    <div class="card-text bookTag-container">
+              <span>Tags: </span>
+              {{#each tags}} 
+              <span class="bookTag">{{tag}}</span>
+              {{/each}}
+            </div>
+            <div class="addTag">
+              <button>Add tag</button>
+            </div>
 				  </div>
 				</div>
 				{{/each}}
-			{{/if}}
 		</section>		
 		
-
 	</main>
 	<footer></footer>
 
@@ -67,4 +75,3 @@
 	<script src='./recipe-books.js'></script>
 </body>
 </html>
-
