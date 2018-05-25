@@ -4,7 +4,7 @@
 <title>Tasteful - my recipe books</title>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 <link rel="stylesheet" href='https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.css'>
-<link rel="stylesheet" href='./index.css'>
+<link rel="stylesheet" href='./recipe-books.css'>
 </head>
 <body>
 	<header class='container-fluid'>
@@ -31,30 +31,24 @@
 	</header>
 
 	<main class='container-fluid'>
-    <header class="row text-center">
-      <h1 class="h2">My Recipe Books</h1>
+    <header class="row col-12 col-md-10 offset-md-1 align-center">
+      <h1 class="h3 alig-center">My Recipe Books</h1>
     <header>
 
 		<section class='booksSummary row col-12 col-md-10 offset-md-1 text-left'>
 			<p>You have {{bookCount}} recipe books!</p>
 		</section>
 		
-		<section class='booksResults row align-center col-12 col-md-10 offset-md-1'>
+		<section class='booksResults row align-left col-12 col-md-10 offset-md-1'>
 			{{#each bookList}}
-				<div class="card align-center col-12 col-sm-6 col-md-4 col-lg-3 " style="width: 18rem;" data-recipeApiId={{id}}>
+				<a href='recipe-books/book?bookId={{id}}' class="card align-left col-12 col-sm-6 col-md-4 col-lg-3 " style="width: 18rem;" data-bookId={{id}}>
 					<img class="card-img-top" src="http://res.cloudinary.com/rollercoaster/image/upload/v1527180406/193308-OXWPEW-70_1_1.jpg" alt="recipe book cover photo">
 				    <div class="card-body">
-				    	<p class="card-title h5">{{name}}</p>
-				    	<p class="card-text">contains {{numberOfRecipes}} recipes</p>
-				        <div class="card-text bookDescription-container">
-              				<span>Description: </span>
-              				{{description}}
-            			</div>
-            			<div class="addTag">
-                			<button>Add tag</button>
-                		</div>
+				    	<p class="card-title h5 bookName" contenteditable="true">{{name}}</p>
+				    	<p class="card-text">contains {{contains}} recipes</p>
+				        <p class="card-text bookDescription-container">description: <span class="bookDescription"contenteditable="true">{{description}}</span></p>
 					</div>
-				</div>
+				</a>
 			{{/each}}
 		</section>		
 		

@@ -18,10 +18,10 @@
 		    	</a>
 		      </li>
 		      <li class="nav-item">
-		        <a class="nav-link recipebookLink" href="/recipe-books" hidden>My recipebook</a>
+		        <a class="nav-link recipebookLink" href="/recipe-books">My recipebook</a>
 		      </li>
 		      <li class="nav-item">
-		      	<a class="nav-link logoutLink" hidden href="#">Logout</a>
+		      	<a class="nav-link logoutLink" href="#">Logout</a>
 		  	  </li>
 		    </ul>
 		  </div>
@@ -37,30 +37,33 @@
     <header>
 
 		<section class='booksSummary row col-12 col-md-10 offset-md-1 text-left'>
-			<p>{{booksSummary}}</p>
+			<p>There are {{recipesCount}} recipes in the book</p>
 		</section>
 		
 		<section class='searchResults row align-center col-12 col-md-10 offset-md-1'>
-				{{#each recipes}}
+			{{#each recipes}}
 				<div class="card align-center col-12 col-sm-6 col-md-4 col-lg-3 " style="width: 18rem;" data-recipeApiId={{id}}>
-				  <img class="card-img-top" src="https://spoonacular.com/recipeImages/{{image}}" alt="photo of {{title}}">
-				  <div class="card-body">
-				    <p class="card-title h5">{{title}}</p>
-				    <p class="card-text">Ready in {{readyInMinutes}} minutes</p>
-				    <p>Serves {{servings}} people</p>
-            <div class="card-text bookTag-container">   
-              <span>Tags: </span>
-              {{#each tags}} 
-              <span class="bookTag">{{tag}}</span>
-              {{/each}}
-              <span class="addTag">
-                <button>Add tag</button>
-              </span> 
-            </div>
+				    <img class="card-img-top" src="https://spoonacular.com/recipeImages/{{image}}" alt="photo of {{title}}">
+				    <div class="card-body">
+				    	<p class="card-title h5">{{title}}</p>
+				    	<p class="card-text">Ready in {{readyInMinutes}} minutes</p>
+				    	<p>Serves {{servings}} people</p>
+            			<div class="card-text bookTag-container">   
+              			<span>Tags: </span>
+              				{{#each tags}} 
+              					<span class="bookTag">{{tag}}</span>
+              				{{/each}}
+              			<span class="addTag">
+              				<button>Add tag</button>
+              			</span> 
+            		</div>
 				  </div>
 				</div>
-				{{/each}}
-		</section>			
+			{{/each}}
+		</section>	
+
+		<!-- display recipe details in lightbox -->
+		<div id='lightbox-container'></div>
 		
 	</main>
 	<footer></footer>

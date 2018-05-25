@@ -66,12 +66,7 @@ function buildLightbox(data){
 $('.loginLink').click(function(e){
 	e.preventDefault();
 	e.stopPropagation();
-	const options={}
-	$.ajax(options)
-	.then(function(data){
 		buildLoginModal(data);
-	})
-	.then(()=>{
 		$.fancybox.open({
 			src:'#login-modal-container',
 			type:'inline',
@@ -81,8 +76,6 @@ $('.loginLink').click(function(e){
 				}
 			}
 		});		
-	})
-	.catch(err=>{console.log(err)});
 });
 
 function buildLoginModal(data){
@@ -201,6 +194,7 @@ $('.logoutLink').click(function(e){
 
 
 /***************** enable recipebook link *******************/
+/*
 $('.recipebookLink').click(function(e){
 	e.preventDefault();
 	e.stopPropagation();
@@ -226,3 +220,4 @@ $('.recipebookLink').click(function(e){
 	})
 	.catch(err=>{console.log(err)});
 });
+*/

@@ -60,7 +60,7 @@ app.use('/recipes/', recipesRouter);
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
 // A protected endpoint which needs a valid JWT to access it
-app.use('/recipe-books/', jwtAuth, recipeBooksRouter);
+app.use('/recipe-books/',recipeBooksRouter);
 
 // add other routers as needed
 

@@ -2,8 +2,8 @@
 // GET '/' list all recipe books of the user
 // GET '/book' retrieve a specific book by id, request.query supplies bookId
 // GET '/recipe' retrieve a specific recipe inside a specific book, request.query supplies bookId and recipeId
-// POST '/' req.body must supply "name" and "user"
-// PUT '/book' req.body supplies editBook:"add" or "delete" to indicate add or delete recipe and supplies recipes apiID (not database _id) for adding or deleting recipes
+// POST '/'  must supply "name" and "user"
+// PUT '/book'  supplies editBook:"add" or "delete" to indicate add or delete recipe and supplies recipes apiID (not database _id) for adding or deleting recipes
 /*
 request.body={
   bookId:String,
@@ -47,11 +47,19 @@ router.get('/', (req, res) => {
 
 // GET a specific recipe book by id; request.query supply "bookId"
 router.get('/book',(req,res)=>{
-  console.log(req.query.bookId);
+  console.log('receive GET request for recipe book details'+req.query);
   RecipeBooks
     .findById(req.query.bookId)
     .then(book=>{
-      res.status(200).json(book);
+      console.log(book);
+      const hbsObj={
+        layout:false,
+        bookTitle:book.name,
+        recipesCount:book.recipes.length,
+        recipes:book.recipes
+      }
+      res.status(200).render(`recipe-books-book`,hbsObj);
+      //res.status(200).json(book);
     })
     .catch(err => res.status(500).json({message: 'Internal server error'}));
 });
@@ -93,7 +101,7 @@ router.post('/',(req,res)=>{
   const requiredFields = ['user', 'name'];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
-    if (!(field in req.body)) {
+    if (!(field in req.q)) {
       const message = `Missing \`${field}\` in request body`;
       console.error(message);
       return res.status(400).send(message);
@@ -102,14 +110,14 @@ router.post('/',(req,res)=>{
 
   RecipeBooks.create(
   	{
-      name: req.body.name,
-      user: req.body.user,
-      recipes: req.body.recipes || [],
-      description: req.body.description || '',
-      numberOfRecipes:req.body.recipes?req.body.recipes.length:0
+      name: req.q.name,
+      user: req.q.user,
+      recipes: req.q.recipes || [],
+      description: req.q.description || '',
+      numberOfRecipes:req.q.recipes?req.q.recipes.length:0
     })
     .then(function(document){
-    	console.log(`Created recipe book ${req.body.name}`);
+    	console.log(`Created recipe book ${req.que.name}`);
       	res.status(201).json(document.serialize());
     })
     .catch(err => {
@@ -120,7 +128,8 @@ router.post('/',(req,res)=>{
 
 // PUT request.body supplies bookId, other fields to be updated
 router.put('/book',(req,res)=>{
-
+  console.log('receive put request, req body = ');
+  console.log(req.body);
 	// check recipe book id is supplied
 	if (!req.body.bookId){
 		const message=`missing required field {bookId} in request body`;
@@ -165,7 +174,8 @@ router.put('/book',(req,res)=>{
         // to delete
         else if(req.body.editBook==='delete'){
           for(let j=0;j<targetRecipeList.length;j++){
-            if(targetRecipeList[j].apiId && (targetRecipeList[j].apiId.toString()===req.body.recipe.apiId)){
+            if(targetRecipeList[j].apiId && (targetRecipeList[j].apiId.toString()===req.query
+   .recipe.apiId)){
               targetRecipeList.splice(j,1);
               break;
             }
