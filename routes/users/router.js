@@ -22,8 +22,7 @@ const {Users} = require('./models');
 
 const router = express.Router();
 
-// Post to register a new user
-router.post('/', jsonParser, (req, res) => {
+function verifyPostReq(req,res,next){
   // check requiredFields exist. (user's registration form may contain several fields, and only certain fields are definitely required)
   const requiredFields = ['username', 'password'];
   const missingField = requiredFields.find(field => !(field in req.body));
@@ -70,7 +69,7 @@ router.post('/', jsonParser, (req, res) => {
       min: 1
     },
     password: {
-      min: 6,
+      min: 4,
       // bcrypt truncates after 72 characters, so let's not give the illusion
       // of security by storing extra (unused) info
       max: 72
@@ -98,11 +97,16 @@ router.post('/', jsonParser, (req, res) => {
       location: tooSmallField || tooLargeField
     });
   }
-  
-  let {username, password} = req.body;
-  // Username and password come in pre-trimmed, otherwise we throw an error before this
 
-  // all above checks passed. Lastly check if conflicts database and create an account if no conflict
+  next();
+}
+
+// Post to register a new user
+router.post('/', jsonParser, verifyPostReq, (req, res) => {
+
+  let {username, password} = req.body;
+
+  // check if conflicts database and create an account if no conflict
   return Users.find({username})
     .count()
     .then(count => {
@@ -115,7 +119,8 @@ router.post('/', jsonParser, (req, res) => {
           location: 'username'
         });
       }
-      // If there is no existing user, hash the password. .hashPassword() is a model instance method defined in models.js
+      // If there is no existing user, hash the password. 
+      // .hashPassword() is a model instance method defined in models.js
       return Users.hashPassword(password);
     })
     .then(hash => {
@@ -125,7 +130,6 @@ router.post('/', jsonParser, (req, res) => {
       });
     })
     .then(user => {
-      // .serialize() is also a model instance method defined in models.js
       return res.status(201).json(user.serialize());
     })
     .catch(err => {
@@ -138,11 +142,12 @@ router.post('/', jsonParser, (req, res) => {
 });
 
 // Never expose all your users like below in a prod application we're just doing this so we have a quick way to see if we're creating users. keep in mind, you can also verify this in the Mongo shell.
+/*
 router.get('/', (req, res) => {
   return Users.find()
     .then(users => res.json(users.map(user => user.serialize())))
     .catch(err => res.status(500).json({message: 'Internal server error'}));
 });
-
+*/
 
 module.exports = {router};

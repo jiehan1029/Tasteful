@@ -66,7 +66,7 @@ function buildLightbox(data){
 $('.loginLink').click(function(e){
 	e.preventDefault();
 	e.stopPropagation();
-		buildLoginModal(data);
+		buildLoginModal();
 		$.fancybox.open({
 			src:'#login-modal-container',
 			type:'inline',
@@ -78,7 +78,7 @@ $('.loginLink').click(function(e){
 		});		
 });
 
-function buildLoginModal(data){
+function buildLoginModal(){
 	let modalHtml=
 	`<h1 class="h5">Login/Signup to explore more</h1>
 	 <form class="loginForm" onsubmit={return false;}>
@@ -114,8 +114,8 @@ $('#login-modal-container').on('click','.loginBtn', function(e){
 	};
 
 	const username=$('#loginUsername').val();
-	console.log(username);
-	Cookies.set('username',$('#loginUsername').val());
+	//console.log(username);
+	//Cookies.set('username',$('#loginUsername').val());
 
 	$.ajax(options)
 	.then(function(data){
@@ -124,9 +124,7 @@ $('#login-modal-container').on('click','.loginBtn', function(e){
 		$('.loginToggle').append(`<a href='#' class='nav-link welcomNavText'>Welcome! ${$('#loginUsername').val()}</a>`);
 		$('.logoutLink').attr({'hidden':false});
 		$('.recipebookLink').attr({'hidden':false});	
-
-		Cookies.set('userSession',data.authToken,{expires:7});
-		Cookies.set('username',data.username);
+		//Cookies.set('username',data.username);
 	})
 	.catch(err=>{console.log(err)})
 	$.fancybox.close();
@@ -150,7 +148,7 @@ $('#login-modal-container').on('click','.signupBtn', function(e){
 	.then(function(data){
 		console.log('User registration succeeded');
 		console.log(data);
-		Cookies.set('username',data.username);
+		//Cookies.set('username',data.username);
 		return data;
 	})
 	.then(function(data){
@@ -174,7 +172,7 @@ $('#login-modal-container').on('click','.signupBtn', function(e){
 			$('.logoutLink').attr({'hidden':false});
 			$('.recipebookLink').attr({'hidden':false});
 
-			Cookies.set('userSession',data,{expires:7});
+			//Cookies.set('userSession',data,{expires:7});
 		})
 		.catch(err=>{console.log(err)})
 		// close modal
@@ -189,35 +187,5 @@ $('.logoutLink').click(function(e){
 	e.stopPropagation();
 
 
-
 });
 
-
-/***************** enable recipebook link *******************/
-/*
-$('.recipebookLink').click(function(e){
-	e.preventDefault();
-	e.stopPropagation();
-	const options={
-		url:'/recipe-books',
-		type:'GET',
-		cache:true,
-		beforeSend: function(xhr){
-			xhr.withCredentials = true;
-			xhr.setRequestHeader("Authorization", 'Bearer '+ Cookies.get('userSession'));
-		},
-		data:{
-			"username":Cookies.get('username')
-		},
-		dataType:'json',
-		contentType: "application/json; charset=utf-8"
-	};
-	$.ajax(options)
-	.then(function(data){
-		console.log('into recipe-books page');
-		//console.log(data);
-		//window.history.pushState(data, "new page", "/recipe-books");
-	})
-	.catch(err=>{console.log(err)});
-});
-*/

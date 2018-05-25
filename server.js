@@ -7,7 +7,7 @@ const morgan = require('morgan');
 const passport = require('passport');
 const path=require('path');
 const hbs=require('express-handlebars');
-
+const cookieParser = require('cookie-parser');
 // will have two router modules with the same name (router) but in different path (/auth and /users), so rename them when importing to server.js using destructuring assignment
 const { router: usersRouter } = require('./routes/users');
 const { router: authRouter, localStrategy, jwtStrategy } = require('./routes/auth');
@@ -21,9 +21,8 @@ const { PORT, DATABASE_URL } = require('./config');
 
 const app = express();
 
-// Logging
 app.use(morgan('common'));
-
+app.use(cookieParser());
 // CORS
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
@@ -60,7 +59,7 @@ app.use('/recipes/', recipesRouter);
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
 // A protected endpoint which needs a valid JWT to access it
-app.use('/recipe-books/',recipeBooksRouter);
+app.use('/recipe-books/',jwtAuth,recipeBooksRouter);
 
 // add other routers as needed
 

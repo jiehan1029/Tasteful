@@ -3,7 +3,6 @@
 'use strict';
 
 // create local strategy to verify username and password are valid (match database record)
-
 const { Strategy: LocalStrategy } = require('passport-local');
 
 // Assigns the Strategy export to the name JwtStrategy using object destructuring
@@ -46,11 +45,22 @@ const localStrategy = new LocalStrategy((username, password, callback) => {
     });
 });
 
+const cookieExtractor = function(req) {
+    let token = null;
+    if (req && req.cookies)
+    {
+        token = req.cookies['jwt'];
+    }
+    console.log("extract jwt from cookies, "+token);
+    return token;
+};
+
 const jwtStrategy = new JwtStrategy(
   {
     secretOrKey: JWT_SECRET,
     // Look for the JWT as a Bearer auth header
-    jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
+    //jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
+    jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
     // Only allow HS256 tokens - the same as the ones we issue
     algorithms: ['HS256']
   },

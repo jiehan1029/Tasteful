@@ -30,7 +30,7 @@ router.use(bodyParser.json());
 
 // GET method, show all recipe books the user created
 router.get('/', (req, res) => {
-  console.log(req.query);
+  //console.log(req.query);
   RecipeBooks.find({})
     .then(books => {
       let hbsObj={
@@ -51,7 +51,7 @@ router.get('/book',(req,res)=>{
   RecipeBooks
     .findById(req.query.bookId)
     .then(book=>{
-      console.log(book);
+      //console.log(book);
       const hbsObj={
         layout:false,
         bookTitle:book.name,
