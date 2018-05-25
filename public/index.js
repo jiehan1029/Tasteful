@@ -119,16 +119,21 @@ $('#login-modal-container').on('click','.loginBtn', function(e){
 			"password":$('#loginPassword').val()
 		})
 	};
+
+	const username=$('#loginUsername').val();
+	console.log(username);
+	Cookies.set('username',$('#loginUsername').val());
+
 	$.ajax(options)
 	.then(function(data){
 		console.log('User login succeeded');
-
 		$('.loginLink').attr({'hidden':true});
 		$('.loginToggle').append(`<a href='#' class='nav-link welcomNavText'>Welcome! ${$('#loginUsername').val()}</a>`);
 		$('.logoutLink').attr({'hidden':false});
 		$('.recipebookLink').attr({'hidden':false});	
 
-		Cookies.set('userSession',data,{expires:7});
+		Cookies.set('userSession',data.authToken,{expires:7});
+		Cookies.set('username',data.username);
 	})
 	.catch(err=>{console.log(err)})
 	$.fancybox.close();
@@ -151,6 +156,8 @@ $('#login-modal-container').on('click','.signupBtn', function(e){
 	$.ajax(options)
 	.then(function(data){
 		console.log('User registration succeeded');
+		console.log(data);
+		Cookies.set('username',data.username);
 		return data;
 	})
 	.then(function(data){
@@ -168,11 +175,12 @@ $('#login-modal-container').on('click','.signupBtn', function(e){
 
 		$.ajax(options2)
 		.then(function(dataFrLogin){
-			console.log('automatic redirect to login succeeded');
+			console.log('automatic login succeeded');
 			$('.loginLink').attr({'hidden':true});
 			$('.loginToggle').append(`<a href='#' class='nav-link welcomNavText'>Welcome! ${data.username}</a>`);
 			$('.logoutLink').attr({'hidden':false});
 			$('.recipebookLink').attr({'hidden':false});
+
 			Cookies.set('userSession',data,{expires:7});
 		})
 		.catch(err=>{console.log(err)})
@@ -202,14 +210,19 @@ $('.recipebookLink').click(function(e){
 		cache:true,
 		beforeSend: function(xhr){
 			xhr.withCredentials = true;
-			xhr.setRequestHeader("Authorization", 'Bearer '+ cookies.get('userSession').auth);
+			xhr.setRequestHeader("Authorization", 'Bearer '+ Cookies.get('userSession'));
 		},
+		data:{
+			"username":Cookies.get('username')
+		},
+		dataType:'json',
+		contentType: "application/json; charset=utf-8"
 	};
 	$.ajax(options)
 	.then(function(data){
 		console.log('into recipe-books page');
-		console.log(data);
+		//console.log(data);
+		//window.history.pushState(data, "new page", "/recipe-books");
 	})
 	.catch(err=>{console.log(err)});
-
 });

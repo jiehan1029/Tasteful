@@ -22,15 +22,26 @@ request.body={
 const express = require('express');
 const router = express.Router();
 const request=require('request-promise');
+const bodyParser=require('body-parser');
 
 const {RecipeBooks}=require('./models');
 
-router.use(express.json());
+router.use(bodyParser.json());
 
 // GET method, show all recipe books the user created
 router.get('/', (req, res) => {
-  RecipeBooks.find()
-    .then(books => res.json(books.map(book => book.serialize())))
+  console.log(req.query);
+  RecipeBooks.find({})
+    .then(books => {
+      let hbsObj={
+        layout:false,
+        username:req.query.username,
+        bookCount:books.length,
+        bookList:books.map(book=>book.serialize())
+      }
+      //res.json(hbsObj);
+      res.render("recipe-books",hbsObj);
+    })
     .catch(err => res.status(500).json({message: 'Internal server error'}));
 });
 
