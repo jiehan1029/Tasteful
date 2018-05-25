@@ -17,14 +17,8 @@ const recipeBooksSchema = mongoose.Schema({
     apiId: {type:Number},
     title: {type:String},
     ingredients:[String],
-    /*
-    cookTime:{
-      number: {type:Number},
-      timeUnit:{type:String}
-    }, */
+    readyInMinutes:{type:Number},
     imageUrl:{type:String},
-    tags:[String],
-    comments: {type:String}
   }]
 });
 
