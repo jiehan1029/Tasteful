@@ -6,7 +6,6 @@ const router = express.Router();
 
 router.get('/',(req,res)=>{
 	const renderData={
-		pageTitle:'Tasteful',
 		searchSummary:'',
 		searchDone:false,
 		layout:false
