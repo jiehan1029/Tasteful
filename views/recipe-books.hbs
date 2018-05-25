@@ -40,8 +40,8 @@
 		<section class='booksResults row align-center col-12 col-md-10 offset-md-1'>
 			{{#if booksDone}}
 				{{#each booksResults}}
-				<div class="card align-center col-12 col-sm-6 col-md-4 col-lg-3 " style="width: 18rem;" data-recipeApiId={{id}}>
-				  <img class="card-img-top" src="https://spoonacular.com/recipeImages/{{image}}" alt="photo of {{title}}">
+				<div class="card align-center col-12 col-sm-6 col-md-4 col-lg-3 " style="width: 18rem;" data-bookId={{id}}>
+				  <img class="card-img-top" src="https://spoonacular.com/recipeImages/{{image}}" alt="photo of {{name}}">
 				  <div class="card-body">
 				    <p class="card-title h5">{{title}}</p>
 				    <p class="card-text">Ready in {{readyInMinutes}} minutes</p>
