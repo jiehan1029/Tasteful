@@ -36,7 +36,6 @@ router.post('/login', localAuth, (req, res) => {
     });
   res.cookie('username',req.user.username,
     {
-      httpOnly:true,
       maxAge:900000
     });
   res.status(200).json({authToken});
@@ -55,10 +54,16 @@ router.post('/refresh', jwtAuth, (req, res) => {
       });
     res.cookie('username',req.user.username,
       {
-        httpOnly:true,
         maxAge:900000
       });
     res.status(200).json({authToken});
 });
+
+
+router.get('/logout',(req,res)=>{
+  res.clearCookie('username');
+  res.clearCookie('jwt');
+  res.status(200).json({message:'user cookie cleared, logout completed'});
+})
 
 module.exports = {router};

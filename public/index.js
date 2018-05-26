@@ -1,7 +1,5 @@
 // to edit instruction section - modify server ajax to send analyzed instruction instead of original instruction
 // add function to enable "add to my recipe book" button
-// add logout functionality
-// add my-recipe-book page
 // add infinite scroll to recipe page
 // css: add cursor to indicate recipe card is clickable; adjust size of the lightbox
 
@@ -63,7 +61,7 @@ function buildLightbox(data){
 }
 
 /*********** Login/Signup modal display *************/
-$('.loginLink').click(function(e){
+$('.navbar-nav').on('click','.loginLink', function(e){
 	e.preventDefault();
 	e.stopPropagation();
 		buildLoginModal();
@@ -92,12 +90,12 @@ function buildLoginModal(){
 	 	<button class="btn signupBtn">Sign up</button>
 	 </form>
 	`;
-
 	$('#login-modal-container').html(modalHtml);
 }
 
 /************** enable login/signup/logout functionality **************/
 
+// enable login -- done
 $('#login-modal-container').on('click','.loginBtn', function(e){
 	e.stopPropagation();
 	e.preventDefault();
@@ -113,23 +111,16 @@ $('#login-modal-container').on('click','.loginBtn', function(e){
 		})
 	};
 
-	const username=$('#loginUsername').val();
-	//console.log(username);
-	//Cookies.set('username',$('#loginUsername').val());
-
 	$.ajax(options)
 	.then(function(data){
 		console.log('User login succeeded');
-		$('.loginLink').attr({'hidden':true});
-		$('.loginToggle').append(`<a href='#' class='nav-link welcomNavText'>Welcome! ${$('#loginUsername').val()}</a>`);
-		$('.logoutLink').attr({'hidden':false});
-		$('.recipebookLink').attr({'hidden':false});	
-		//Cookies.set('username',data.username);
+		toggleNavBarDisplay();
 	})
 	.catch(err=>{console.log(err)})
 	$.fancybox.close();
 });
 
+// enable signup -- done
 $('#login-modal-container').on('click','.signupBtn', function(e){
 	e.stopPropagation();
 	e.preventDefault();
@@ -147,8 +138,6 @@ $('#login-modal-container').on('click','.signupBtn', function(e){
 	$.ajax(options)
 	.then(function(data){
 		console.log('User registration succeeded');
-		console.log(data);
-		//Cookies.set('username',data.username);
 		return data;
 	})
 	.then(function(data){
@@ -167,12 +156,7 @@ $('#login-modal-container').on('click','.signupBtn', function(e){
 		$.ajax(options2)
 		.then(function(dataFrLogin){
 			console.log('automatic login succeeded');
-			$('.loginLink').attr({'hidden':true});
-			$('.loginToggle').append(`<a href='#' class='nav-link welcomNavText'>Welcome! ${data.username}</a>`);
-			$('.logoutLink').attr({'hidden':false});
-			$('.recipebookLink').attr({'hidden':false});
-
-			//Cookies.set('userSession',data,{expires:7});
+			toggleNavBarDisplay();
 		})
 		.catch(err=>{console.log(err)})
 		// close modal
@@ -181,11 +165,32 @@ $('#login-modal-container').on('click','.signupBtn', function(e){
 	.catch(err=>{console.log(err)});
 });
 
-// logout is triggered by a nav-link --- NOT COMPLETED YET
-$('.logoutLink').click(function(e){
+// enable logout - done 
+$('.navbar-nav').on('click','.logoutLink', function(e){
 	e.preventDefault();
 	e.stopPropagation();
-
-
+	const options={
+		url:'/auth/logout',
+		method:'GET'
+	};
+	$.ajax(options)
+		.then((res)=>{
+			console.log(res.message);
+			toggleNavBarDisplay();
+		})
+		.catch(err=>console.log(err));
 });
 
+function toggleNavBarDisplay(){
+	if(Cookies.get('username')){
+		$('.loginLink').attr({'hidden':true});
+		$('.loginToggle').append(`<a href='#' class='nav-link welcomNavText'>Welcome! ${Cookies.get('username')}</a>`);
+		$('.logoutLink').attr({'hidden':false});
+		$('.recipebookLink').attr({'hidden':false});		
+	}else{
+		$('.loginLink').attr({'hidden':false});
+		$('.loginToggle').html(`<a class="nav-link loginLink" href="#">Login/Signup</a>`);
+		$('.logoutLink').attr({'hidden':true});
+		$('.recipebookLink').attr({'hidden':true});
+	}
+}
