@@ -1,0 +1,19 @@
+<!-- partial for recipe details lightbox -->
+<script id="recipe-details-partial" type="text/x-handlebars-template">
+	<div id="recipe-details-lightbox-container">
+	<div class="col-10 offset-1 align-center" style="width: 40rem;" data-recipeApiId=`${data.recipeApiId}`>
+		<img class="card-img-top" src=`${data.image}` alt=`${data.title}`>
+		<div class="card-body">
+			<h5 class="card-title h5">${data.title}</h5>
+			<p class="card-text">Ready in ${data.readyInMinutes} minutes</p>
+			<p>Serves ${data.servings} people</p>
+			<button class='addToBookBtn btn btn-primary'>Add to my recipe book</button>
+			<hr>
+			<h5 class='h5'>Ingredients</h5>
+			<div>${ingredientsList.html()}</div>
+			<h5 class="h5">Instructions</h5>
+			<div>${data.instructions}</div>
+		</div>
+	</div>
+	</div>
+</script>
