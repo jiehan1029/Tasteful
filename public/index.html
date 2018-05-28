@@ -116,8 +116,11 @@
 					{{/each}}
 						<option value='newBook'>--- create new book ---</option>
 					</select>
+					<form class='lightbox-new-book-form' hidden>
+						<label>book name: <input type='text' class='lightbox-new-book-name'></label>
+					</form>
 					<button class='add-to-book-btn btn btn-primary'>Add to my recipe book</button>
-					<p class='remainder added-remainder' hidden>Recipe added!</p>
+					<p class='remainder added-remainder'></p>
 					{{else}}
 					<p class='remainder'>Please login or signup to save recipe to recipe book</p>
 					{{/if}}

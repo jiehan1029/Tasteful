@@ -16,7 +16,6 @@ const recipeBooksSchema = mongoose.Schema({
   recipes:[{
     apiId: {type:Number},
     title: {type:String},
-    ingredients:[String],
     readyInMinutes:{type:Number},
     imageUrl:{type:String},
     servings:{type:Number}

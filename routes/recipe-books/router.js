@@ -97,32 +97,38 @@ router.get('/recipe',(req,res)=>{
 
 // POST create new book
 router.post('/',(req,res)=>{
-  const requiredFields = ['user', 'name'];
+  // check required fields are supplied
+  const requiredFields = ['name'];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
-    if (!(field in req.q)) {
+    if (!(field in req.body)) {
       const message = `Missing \`${field}\` in request body`;
       console.error(message);
       return res.status(400).send(message);
     }
   }
 
-  RecipeBooks.create(
-  	{
-      name: req.q.name,
-      user: req.q.user,
-      recipes: req.q.recipes || [],
-      description: req.q.description || '',
-      numberOfRecipes:req.q.recipes?req.q.recipes.length:0
-    })
-    .then(function(document){
-    	console.log(`Created recipe book ${req.que.name}`);
-      	res.status(201).json(document.serialize());
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({ message: 'Internal server error' });
-    });
+  // check no duplicate book name
+  if(RecipeBooks.find({name:req.body.name}).count()>0){
+    res.status(400).send('book name already taken, please use a different name!');
+  }else{
+    RecipeBooks.create(
+    	{
+        name: req.body.name,
+        user: req.cookies['username'],
+        recipes: req.body.recipes || [],
+        description: req.body.description || '',
+        numberOfRecipes:req.body.recipes?req.body.recipes.length:0
+      })
+      .then(function(document){
+      	console.log(`Created recipe book ${req.body.name}`);
+        	res.status(201).json(document.serialize());
+      })
+      .catch(err => {
+        console.error(err);
+        res.status(500).json({ message: 'Internal server error' });
+      });
+  }
 });
 
 // PUT update current book

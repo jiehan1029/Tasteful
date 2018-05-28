@@ -1,6 +1,6 @@
 // to edit instruction section - modify server ajax to send analyzed instruction instead of original instruction
-// add function to enable "add to my recipe book" button
 // add infinite scroll to recipe page
+// add floating side bars for top/login/signup 
 // css: add cursor to indicate recipe card is clickable; adjust size of the lightbox
 
 
@@ -187,53 +187,90 @@ $('body').on('click','.card',function(e){
 });
 
 /**** enable add to recipe book inside recipe details lightbox ****/
+// enable input new book name
+$('body').on('change','.lightbox-book-select',function(e){
+	e.stopPropagation();
+	if($('.lightbox-book-select').val()==='newBook'){
+		// display new book form
+		$('.lightbox-new-book-form').attr({hidden:false});
+	}else{
+		$('.lightbox-new-book-form').attr({hidden:true});
+	}
+});
+
+// enable add to new book & add to existing books
 $('body').on('click','.add-to-book-btn',function(e){
 	e.preventDefault();
 	e.stopPropagation();
 
 	let selection=$('.lightbox-book-select').val();
+
+	let recipeId=$(e.target).closest('.lightbox-recipe-details').attr('data-recipeApiId');
+	let recipeImg=$(e.target).closest('.lightbox-recipe-details').find('img').attr('src');
+	let recipeTitle=$(e.target).closest('.lightbox-recipe-details').find('img').attr('alt');
+	let recipeServing=$(e.target).closest('.lightbox-recipe-details').find('.recipe-serving').attr('data-recipeServing');
+	let recipeReady=$(e.target).closest('.lightbox-recipe-details').find('.recipe-ready').attr('data-recipeReady');
+	
+	let recipe={
+		apiId:recipeId,
+		title:recipeTitle,
+		imageUrl:recipeImg,
+		readyInMinutes:recipeReady,
+		servings:recipeServing
+	}
+
 	// to create new book
 	if(selection==='newBook'){
+		if($('.lightbox-new-book-name').val()===''){
+			$('.added-remainder').text('Please input the name of new book!')
+		}else{
+			const options={
+				url:'/recipe-books',
+				type:'POST',
+				contentType: "application/json; charset=utf-8",
+				dataType:'json',
+				data:JSON.stringify({
+					name:$('.lightbox-new-book-name').val(),
+					recipes:[recipe]
+				})			
+			};
 
+			$.ajax(options)
+				.then(function(data){
+					console.log(data);
+					$('.added-remainder').text('Recipe added!');
+					setTimeout(function(){
+						$('.added-remainder').text('');
+					},2000);	
+				})
+				.catch(err=>{console.log(err)});
+		}
 	}
 	// add to current book
 	else{
 		// ajax POST to server
-		let recipeId=$(e.target).closest('.lightbox-recipe-details').attr('data-recipeApiId');
-		let recipeImg=$(e.target).closest('.lightbox-recipe-details.img').attr('src');
-		let recipeTitle=$(e.target).closest('.lightbox-recipe-details.img').attr('alt');
-		let recipeServing=$(e.target).closest('.lightbox-recipe-details.recipe-serving').attr('data-recipeServing');
-		let recipeReady=$(e.target).closest('.lightbox-recipe-details.recipe-ready').attr('data-recipeReady');
 		const options={
-			type:'POST',
-			url:'/recipe-books',
+			type:'PUT',
+			url:'/recipe-books/book',
 			contentType: "application/json; charset=utf-8",
 			dataType:'json',
-			data:{
+			data:JSON.stringify({
 				bookId:selection,
 				editBook:'add',
-				recipe:{
-					apiId:recipeId,
-					title:recipeTitle,
-					imageUrl:recipeImg,
-					readyInMinutes:recipeReady,
-					servings:recipeServing
-				}
-			}
+				recipe:recipe
+			})
 		};
 
-		$.ajax()
+		$.ajax(options)
 			.then(function(data){
 				// show remainder (only a few seconds), then hide again
 				console.log('PUT book succeeded')
 				console.log(data);
-				$('.added-remainder').attr({hidden:false});
+				$('.added-remainder').text('Recipe added!');
 				setTimeout(function(){
-					$('.added-remainder').attr({hidden:true});
+					$('.added-remainder').text('');
 				},2000);				
 			})
 			.catch(err=>{console.log(err)});
 	}
-
-
 });
