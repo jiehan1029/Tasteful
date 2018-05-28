@@ -44,7 +44,8 @@ function GetRecipesFromApi(req,res){
             searchResults:data,
             layout:false
           };
-      res.status(200).render('index',hbsObj);
+      res.status(200).json(hbsObj);
+      //res.status(200).render('index',hbsObj);
     })
     .catch(function(err){
       console.error(err);

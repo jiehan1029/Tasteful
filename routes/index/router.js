@@ -1,8 +1,7 @@
 'use strict';
 const express = require('express');
-//const bodyParser = require('body-parser');
-//const jsonParser = bodyParser.json();
 const router = express.Router();
+
 
 router.get('/',(req,res)=>{
 	const renderData={
@@ -10,8 +9,9 @@ router.get('/',(req,res)=>{
 		searchDone:false,
 		layout:false
 	};
-
-	res.render('index',renderData);
+	//res.render('index.hbs',renderData);
+	//console.log('send file');
+	res.sendFile(path.join(__dirname + '/index.html'));
 });
 
 module.exports = {router};

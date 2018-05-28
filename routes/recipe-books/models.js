@@ -19,6 +19,7 @@ const recipeBooksSchema = mongoose.Schema({
     ingredients:[String],
     readyInMinutes:{type:Number},
     imageUrl:{type:String},
+    servings:{type:Number}
   }]
 });
 

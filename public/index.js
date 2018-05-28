@@ -4,67 +4,25 @@
 // css: add cursor to indicate recipe card is clickable; adjust size of the lightbox
 
 
-/*********** Recipe details lightbox display *************/
-// when user clicks on the recipe card, show details on a lightbox
-$('.searchResults').on('click','.card',function(e){
-	e.stopPropagation();
-	let recipeApiId=$(e.target).closest('.card').attr('data-recipeApiId');
-	const options={
-		url:'/recipes/details',
-		type:'GET',
-		cache:true,
-		data:{recipeApiId:recipeApiId},
-		dataType:'json'
-	};
-	$.ajax(options)
-	.then(function(data){
-		buildLightbox(data);
-	})
-	.then(()=>{
-		$.fancybox.open({
-			src:'#lightbox-container',
-			type:'inline',
-			opts:{
-				afterShow:function(instance,current){
-					console.info('show recipe details in modal!')
-				}
-			}
-		});
-	})
-	.catch(err=>{console.log(err)});
-});
+// compile handlebars templates
+let headerTemplate=Handlebars.compile($('#header-template').html());
+let searchTemplate=Handlebars.compile($('#search-template').html());
+let lightboxTemplate=Handlebars.compile($('#lightbox-template').html());
 
-function buildLightbox(data){
-	let ingredientsList=$('<ul>');
-	for(let i=0;i<data.extendedIngredients.length;i++){
-		let $tempLi=$('<li>');
-		$tempLi.text(data.extendedIngredients[i].originalString);
-		ingredientsList.append($tempLi);
-	}
-	let lightboxHtml=
-	`<div class="col-10 offset-1 align-center" style="width: 18rem;" data-recipeApiId="${data.recipeApiId}">
-		<img class="card-img-top" src="${data.image}" alt="${data.title}">
-		<div class="card-body">
-			<h5 class="card-title h5">${data.title}</h5>
-			<p class="card-text">Ready in ${data.readyInMinutes} minutes</p>
-			<p>Serves ${data.servings} people</p>
-			<button class='addToBookBtn btn btn-primary'>Add to my recipe book</button>
-			<hr>
-			<h5 class='h5'>Ingredients</h5>
-			<div>${ingredientsList.html()}</div>
-			<h5 class="h5">Instructions</h5>
-			<div>${data.instructions}</div>
-		</div>
-	</div>`;
-	console.log(lightboxHtml);
-	$('#lightbox-container').html(lightboxHtml);
+$(loadHeader);
+
+// display header navbar based on user login status
+function loadHeader(){
+	let userLoggedIn=Cookies.get('username')===undefined ? false:Cookies.get('username');
+	let hbsObj={userLoggedIn:userLoggedIn};
+	$('.header-template-container').html(headerTemplate(hbsObj))
 }
 
 /*********** Login/Signup modal display *************/
-$('.navbar-nav').on('click','.loginLink', function(e){
+$('body').on('click','.loginLink', function(e){
 	e.preventDefault();
 	e.stopPropagation();
-		buildLoginModal();
+		$('#login-modal-container').attr({hidden:false});
 		$.fancybox.open({
 			src:'#login-modal-container',
 			type:'inline',
@@ -76,27 +34,10 @@ $('.navbar-nav').on('click','.loginLink', function(e){
 		});		
 });
 
-function buildLoginModal(){
-	let modalHtml=
-	`<h1 class="h5">Login/Signup to explore more</h1>
-	 <form class="loginForm" onsubmit={return false;}>
-	 	<fieldset>
-	 	<label for="loginUsername">Username</label>
-	 	<input id="loginUsername" type="text" class="form-control" required>
-	 	<label for="loginPassword">Password</label>
-	 	<input id="loginPassword" type="text" class="form-control" required>
-	 	</fieldset>
-	 	<button type="submit" class="loginBtn btn btn-primary">Log in</button>
-	 	<button class="btn signupBtn">Sign up</button>
-	 </form>
-	`;
-	$('#login-modal-container').html(modalHtml);
-}
-
 /************** enable login/signup/logout functionality **************/
 
-// enable login -- done
-$('#login-modal-container').on('click','.loginBtn', function(e){
+// enable login
+$('body').on('click','.loginBtn', function(e){
 	e.stopPropagation();
 	e.preventDefault();
 	// call server to log in
@@ -114,14 +55,15 @@ $('#login-modal-container').on('click','.loginBtn', function(e){
 	$.ajax(options)
 	.then(function(data){
 		console.log('User login succeeded');
-		toggleNavBarDisplay();
+		loadHeader();
+		sessionStorage.setItem('userBooks', JSON.stringify(data));
 	})
 	.catch(err=>{console.log(err)})
 	$.fancybox.close();
 });
 
-// enable signup -- done
-$('#login-modal-container').on('click','.signupBtn', function(e){
+// enable signup
+$('body').on('click','.signupBtn', function(e){
 	e.stopPropagation();
 	e.preventDefault();
 	// call server to create account
@@ -156,7 +98,8 @@ $('#login-modal-container').on('click','.signupBtn', function(e){
 		$.ajax(options2)
 		.then(function(dataFrLogin){
 			console.log('automatic login succeeded');
-			toggleNavBarDisplay();
+			loadHeader();
+			sessionStorage.setItem('userBooks', JSON.stringify(dataFrLogin));
 		})
 		.catch(err=>{console.log(err)})
 		// close modal
@@ -165,8 +108,8 @@ $('#login-modal-container').on('click','.signupBtn', function(e){
 	.catch(err=>{console.log(err)});
 });
 
-// enable logout - done 
-$('.navbar-nav').on('click','.logoutLink', function(e){
+// enable logout 
+$('body').on('click','.logoutLink', function(e){
 	e.preventDefault();
 	e.stopPropagation();
 	const options={
@@ -176,21 +119,121 @@ $('.navbar-nav').on('click','.logoutLink', function(e){
 	$.ajax(options)
 		.then((res)=>{
 			console.log(res.message);
-			toggleNavBarDisplay();
+			loadHeader();
+			sessionStorage.removeItem('userBooks');
 		})
 		.catch(err=>console.log(err));
 });
 
-function toggleNavBarDisplay(){
-	if(Cookies.get('username')){
-		$('.loginLink').attr({'hidden':true});
-		$('.loginToggle').append(`<a href='#' class='nav-link welcomNavText'>Welcome! ${Cookies.get('username')}</a>`);
-		$('.logoutLink').attr({'hidden':false});
-		$('.recipebookLink').attr({'hidden':false});		
-	}else{
-		$('.loginLink').attr({'hidden':false});
-		$('.loginToggle').html(`<a class="nav-link loginLink" href="#">Login/Signup</a>`);
-		$('.logoutLink').attr({'hidden':true});
-		$('.recipebookLink').attr({'hidden':true});
+/*********** display recipe search results *************/
+// disable html form submission, handle with ajax
+$('body').on('submit','.search-recipe-form',function(e){
+	e.preventDefault();
+	e.stopPropagation();
+	const options={
+		url:'/recipes',
+		type:'POST',
+		cache:true,
+		data:{
+			query:$('.search-query').val(),
+			cuisine:$('.search-cuisine').val(),
+			type:$('.search-type').val()
+		},
+		dataType:'json'		
+	};
+	$.ajax(options)
+		.then(function(data){
+			const html=searchTemplate(data);
+			$('.search-template-container').html(html);
+		})
+		.catch(err=>{console.log(err)});
+});
+
+/*********** display recipe details in lightbox *************/
+// when user clicks on the recipe card, show details on a lightbox
+$('body').on('click','.card',function(e){
+	e.stopPropagation();
+	let recipeApiId=$(e.target).closest('.card').attr('data-recipeApiId');
+	const options={
+		url:'/recipes/details',
+		type:'GET',
+		cache:true,
+		data:{recipeApiId:recipeApiId},
+		dataType:'json'
+	};
+	$.ajax(options)
+	.then(function(data){
+		let hbsObj=data;
+		let userLoggedIn=Cookies.get('username')===undefined ? false:Cookies.get('username');
+		hbsObj.userLoggedIn=userLoggedIn;
+		let userBooks=JSON.parse(sessionStorage.getItem('userBooks'));
+		hbsObj.userBooks=userBooks;
+		console.log(hbsObj);
+		let html=lightboxTemplate(hbsObj);
+		$('#lightbox-template-container').html(html);
+	})
+	.then(()=>{
+		$.fancybox.open({
+			src:'#lightbox-template-container',
+			type:'inline',
+			opts:{
+				afterShow:function(instance,current){
+					console.info('show recipe details in modal!')
+				}
+			}
+		});
+	})
+	.catch(err=>{console.log(err)});
+});
+
+/**** enable add to recipe book inside recipe details lightbox ****/
+$('body').on('click','.add-to-book-btn',function(e){
+	e.preventDefault();
+	e.stopPropagation();
+
+	let selection=$('.lightbox-book-select').val();
+	// to create new book
+	if(selection==='newBook'){
+
 	}
-}
+	// add to current book
+	else{
+		// ajax POST to server
+		let recipeId=$(e.target).closest('.lightbox-recipe-details').attr('data-recipeApiId');
+		let recipeImg=$(e.target).closest('.lightbox-recipe-details.img').attr('src');
+		let recipeTitle=$(e.target).closest('.lightbox-recipe-details.img').attr('alt');
+		let recipeServing=$(e.target).closest('.lightbox-recipe-details.recipe-serving').attr('data-recipeServing');
+		let recipeReady=$(e.target).closest('.lightbox-recipe-details.recipe-ready').attr('data-recipeReady');
+		const options={
+			type:'POST',
+			url:'/recipe-books',
+			contentType: "application/json; charset=utf-8",
+			dataType:'json',
+			data:{
+				bookId:selection,
+				editBook:'add',
+				recipe:{
+					apiId:recipeId,
+					title:recipeTitle,
+					imageUrl:recipeImg,
+					readyInMinutes:recipeReady,
+					servings:recipeServing
+				}
+			}
+		};
+
+		$.ajax()
+			.then(function(data){
+				// show remainder (only a few seconds), then hide again
+				console.log('PUT book succeeded')
+				console.log(data);
+				$('.added-remainder').attr({hidden:false});
+				setTimeout(function(){
+					$('.added-remainder').attr({hidden:true});
+				},2000);				
+			})
+			.catch(err=>{console.log(err)});
+	}
+
+
+});

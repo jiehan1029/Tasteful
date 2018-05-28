@@ -95,9 +95,8 @@ router.get('/recipe',(req,res)=>{
     });
 });
 
-// POST 
+// POST create new book
 router.post('/',(req,res)=>{
-
   const requiredFields = ['user', 'name'];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
@@ -126,7 +125,8 @@ router.post('/',(req,res)=>{
     });
 });
 
-// PUT request.body supplies bookId, other fields to be updated
+// PUT update current book
+// request.body supplies bookId, other fields to be updated
 router.put('/book',(req,res)=>{
   console.log('receive put request, req body = ');
   console.log(req.body);

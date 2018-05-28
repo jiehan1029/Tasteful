@@ -31,18 +31,18 @@
 			    </ul>
 		  	</div>
 		</nav>
-		<a href='/' class='pageHeader h1 text-center'><a href="/">Tasteful</a></h1>
+		<h1 class='pageHeader h1 text-center'><a href="/">Tasteful</a></h1>
 		<p class='lead text-center'>Make. Enjoy. Share.</p>
 	</script>
 	</header>
 
 	<main class='container-fluid'>
-
-		<form method='POST' action='/recipes' class='search-recipe-form row col-12 col-md-10 offset-md-1'>
+		<!--disable html submission, will submit via ajax-->
+		<form class='search-recipe-form row col-12 col-md-10 offset-md-1'>
 			<label for='recipeSearchBox' class='col-12 font-italic'>Find something tastful</label>
-			<input id='recipeSearchBox' class="form-control col-xs-12 col-md-6" type='text' placeholder="cinnamon apple cake" name='query'>
+			<input id='recipeSearchBox' class="form-control col-xs-12 col-md-6 search-query" type='text' placeholder="cinnamon apple cake" name='query'>
 			<div class='row col-xs-12 col-md-4'>
-			<select class="form-control col" name='cuisine'>
+			<select class="form-control col search-cuisine" name='cuisine'>
 				<option value=''>All cuisine</option>
 				<option value='american'>American</option>
 				<option value='caribean'>Caribean</option>
@@ -61,7 +61,7 @@
 				<option value='thai'>Thai</option>
 				<option value='vietnamese'>Viewtnamese</option>
 			</select>
-			<select class="form-control col" name='type'>
+			<select class="form-control col search-type" name='type'>
 				<option value=''>All types</option>
 				<option value='appetizer'>Appetizer</option>
 				<option value='bread'>Bread</option>
@@ -74,35 +74,81 @@
 				<option value='soup'>Soup</option>
 			</select>
 			</div>
-			<button type="submit" class="btn btn-primary col-md-2">Search</button>
+			<button class="btn btn-primary col-md-2">Search</button>
 		</form>
 
-
 		<div class='search-template-container'>
-		<section class='search-summary row col-12 col-md-10 offset-md-1 text-left'>
-			<p>{{searchSummary}}</p>
-		</section>
-		
-		<section class='searchResults row align-center col-12 col-md-10 offset-md-1'>
-			{{#if searchDone}}
-				{{#each searchResults}}
-				<div class="card align-center col-12 col-sm-6 col-md-4 col-lg-3 " style="width: 18rem;" data-recipeApiId={{id}}>
-				  <img class="card-img-top" src="https://spoonacular.com/recipeImages/{{image}}" alt="photo of {{title}}">
-				  <div class="card-body">
-				    <p class="card-title h5">{{title}}</p>
-				    <p class="card-text">Ready in {{readyInMinutes}} minutes</p>
-				    <p>Serves {{servings}} people</p>
-				  </div>
-				</div>
-				{{/each}}
-			{{/if}}
-		</section>		
+		<script id="search-template" type="text/x-handlebars-templates">
+			<section class='search-summary row col-12 col-md-10 offset-md-1 text-left'>
+				<p>{{searchSummary}}</p>
+			</section>
+			<section class='searchResults row align-center col-12 col-md-10 offset-md-1'>
+				{{#if searchDone}}
+					{{#each searchResults}}
+					<div class="card align-center col-12 col-sm-6 col-md-4 col-lg-3 " style="width: 18rem;" data-recipeApiId={{id}}>
+					  <img class="card-img-top" src="https://spoonacular.com/recipeImages/{{image}}" alt="photo of {{title}}">
+					  <div class="card-body">
+					    <p class="card-title h5">{{title}}</p>
+					    <p class="card-text">Ready in {{readyInMinutes}} minutes</p>
+					    <p>Serves {{servings}} people</p>
+					  </div>
+					</div>
+					{{/each}}
+				{{/if}}
+			</section>	
+		</script>	
 		</div>
+
 		<!-- display recipe details in lightbox -->
-		<div id='lightbox-container'></div>
+		<div id='lightbox-template-container'>
+		<script id="lightbox-template" type="text/x-handlebars-templates">
+			<div class="col-10 offset-1 align-center lightbox-recipe-details" style="width: 18rem;" data-recipeApiId="{{recipeApiId}}">
+				<img class="card-img-top" src="{{image}}" alt="{{title}}">
+				<div class="card-body">
+					<h5 class="card-title h5">{{title}}</h5>
+					<p class="card-text recipe-ready" data-recipeReady={{readyInMinutes}}>Ready in {{readyInMinutes}} minutes</p>
+					<p class='recipe-serving' data-recipeServing={{servings}}>Serves {{servings}} people</p>
+					<hr>
+					{{#if userLoggedIn}}
+					<select class='lightbox-book-select'>
+					{{#each userBooks}}
+						<option value={{bookId}}>{{name}}</option>
+					{{/each}}
+						<option value='newBook'>--- create new book ---</option>
+					</select>
+					<button class='add-to-book-btn btn btn-primary'>Add to my recipe book</button>
+					<p class='remainder added-remainder' hidden>Recipe added!</p>
+					{{else}}
+					<p class='remainder'>Please login or signup to save recipe to recipe book</p>
+					{{/if}}
+					<hr>
+					<h5 class='h5'>Ingredients</h5>
+					<ul>
+					{{#each extendedIngredients}}
+						<li>{{originalString}}</li>
+					{{/each}}
+					</ul>
+					<h5 class="h5">Instructions</h5>
+					<div>{{instructions}}</div>
+				</div>
+			</div>
+		</script>
+		</div>
 
 		<!-- display login/signup in modal -->
-		<div id='login-modal-container'></div>
+		<div id='login-modal-container' hidden>
+			<h1 class="h5">Login/Signup to explore more</h1>
+		    <form class="login-form" onsubmit={return false;}>
+				<fieldset>
+				<label for="loginUsername">Username</label>
+			 	<input id="loginUsername" class='login-username' type="text" class="form-control" required>
+			 	<label for="loginPassword">Password</label>
+			 	<input id="loginPassword" class='login-password' type="text" class="form-control" required>
+			 	</fieldset>
+			 	<button type="submit" class="loginBtn btn btn-primary">Log in</button>
+			 	<button class="btn signupBtn">Sign up</button>
+			</form>			
+		</div>
 
 	</main>
 	<footer></footer>
