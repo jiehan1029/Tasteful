@@ -7,54 +7,81 @@
 <link rel="stylesheet" href='../recipe-books-book.css'>
 </head>
 <body>
-	
+
 	<header class='container-fluid'>
 		<nav class="navbar navbar-expand navbar-light bg-light col-md-10 offset-md-1">
-		  <div class="collapse navbar-collapse">
-		    <ul class="navbar-nav ml-auto">
-		      <li class="nav-item loginToggle">
-		     	<a class="nav-link loginLink" href="#">
-		     		Login/Signup
-		    	</a>
-		      </li>
-		      <li class="nav-item">
-		        <a class="nav-link recipebookLink" href="/recipe-books">My recipebook</a>
-		      </li>
-		      <li class="nav-item">
-		      	<a class="nav-link logoutLink" href="#">Logout</a>
-		  	  </li>
-		    </ul>
-		  </div>
+		  	<div class="collapse navbar-collapse">
+			    <ul class="navbar-nav ml-auto">
+				    <li class="nav-item header-username-template-container">
+				    <script id="header-username-template" type="text/x-handlebars-templates">
+				        <p class="nav-link">Welcome! \{{userLoggedIn}}</p>
+			      	</script>
+			      	</li>
+			      	<li class="nav-item">
+			        	<a class="nav-link recipebookLink" href="/recipe-books">My recipebook</a>
+			      	</li>
+			      	<li class="nav-item">
+			      		<a class="nav-link logoutLink" href="/auth/logout/protected">Logout</a>
+			  	  	</li>
+			    </ul>
+		  	</div>
 		</nav>
-
-		<h1 class='h1 text-center'>Tasteful</h1>
+		<h1 class='pageHeader h1 text-center'><a href="/">Tasteful</a></h1>
 		<p class='lead text-center'>Make. Enjoy. Share.</p>
 	</header>
 
 	<main class='container-fluid'>
-    <header class="row text-center">
-      <h1 class="h2">My Recipe Books - {{bookTitle}}</h1>
-    <header>
+	    <header class="row text-center">
+	      <h1 class="h2">My Recipe Books - {{bookTitle}}</h1>
+	    </header>
 
-		<section class='booksSummary row col-12 col-md-10 offset-md-1 text-left'>
+		<section class='recipes-summary row col-12 col-md-10 offset-md-1 text-left'>
 			<p>There are {{recipesCount}} recipes in the book</p>
 		</section>
 		
-		<section class='searchResults row align-center col-12 col-md-10 offset-md-1'>
+		<section class='recipes-list row align-center col-12 col-md-10 offset-md-1'>
 			{{#each recipes}}
-				<div class="card align-center col-12 col-sm-6 col-md-4 col-lg-3 " style="width: 18rem;" data-recipeApiId={{id}}>
-				    <img class="card-img-top" src="https://spoonacular.com/recipeImages/{{image}}" alt="photo of {{title}}">
-				    <div class="card-body">
-				    	<p class="card-title h5">{{title}}</p>
-				    	<p class="card-text">Ready in {{readyInMinutes}} minutes</p>
-				    	<p>Serves {{servings}} people</p>
-				  </div>
-				</div>
+			<div class="card align-center col-12 col-sm-6 col-md-4 col-lg-3 " style="width: 18rem;" data-recipeApiId={{apiId}}>
+			    <img class="card-img-top" src={{imageUrl}} alt="photo of {{title}}">
+			    <div class="card-body">
+			    	<p class="card-title h5">{{title}}</p>
+			    	<p class="card-text">Ready in {{readyInMinutes}} minutes</p>
+			    	<p>Serves {{servings}} people</p>
+			  </div>
+			</div>
 			{{/each}}
+			<div class="card align-center col-12 col-sm-6 col-md-4 col-lg-3 " style="width: 18rem;">
+			    <a href='/'>
+				    <img src='' class='card-img-top' aria-hidden="true">
+				    <div class="card-body">
+					    <p class="card-title h5">Add new recipes</p>
+					    <p class='lead'>back to search</p>
+				    </div>
+			    </a>
+			</div>
 		</section>	
 
-		<!-- display recipe details in lightbox -->
-		<div id='lightbox-container'></div>
+		<div id='lightbox-template-container'>
+		<script id="lightbox-template" type="text/x-handlebars-templates">
+			<div class="col-10 offset-1 align-center lightbox-recipe-details" style="width: 18rem;" data-recipeApiId="{{recipeApiId}}">
+				<img class="card-img-top" src=\{{image}} alt=\{{title}}>
+				<div class="card-body">
+					<h5 class="card-title h5">\{{title}}</h5>
+					<p class="card-text recipe-ready" data-recipeReady=\{{readyInMinutes}}>Ready in \{{readyInMinutes}} minutes</p>
+					<p class='recipe-serving' data-recipeServing=\{{servings}}>Serves \{{servings}} people</p>
+					<hr>
+					<h5 class='h5'>Ingredients</h5>
+					<ul>
+					\{{#each extendedIngredients}}
+						<li>\{{originalString}}</li>
+					\{{/each}}
+					</ul>
+					<h5 class="h5">Instructions</h5>
+					<div>\{{instructions}}</div>
+				</div>
+			</div>
+		</script>
+		</div>
 		
 	</main>
 	<footer></footer>
@@ -65,7 +92,8 @@
   crossorigin="anonymous"></script>
   	<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>	
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js'></script>	
 	<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.js'></script>
 	<script src='../recipe-books-book.js'></script>
 </body>

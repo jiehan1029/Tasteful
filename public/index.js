@@ -56,6 +56,7 @@ $('body').on('click','.loginBtn', function(e){
 	.then(function(data){
 		console.log('User login succeeded');
 		loadHeader();
+		console.log(data);
 		sessionStorage.setItem('userBooks', JSON.stringify(data));
 	})
 	.catch(err=>{console.log(err)})
@@ -99,6 +100,7 @@ $('body').on('click','.signupBtn', function(e){
 		.then(function(dataFrLogin){
 			console.log('automatic login succeeded');
 			loadHeader();
+			console.log(dataFrLogin);
 			sessionStorage.setItem('userBooks', JSON.stringify(dataFrLogin));
 		})
 		.catch(err=>{console.log(err)})
@@ -187,7 +189,7 @@ $('body').on('click','.card',function(e){
 });
 
 /**** enable add to recipe book inside recipe details lightbox ****/
-// enable input new book name
+// display new book form
 $('body').on('change','.lightbox-book-select',function(e){
 	e.stopPropagation();
 	if($('.lightbox-book-select').val()==='newBook'){
@@ -238,6 +240,15 @@ $('body').on('click','.add-to-book-btn',function(e){
 			$.ajax(options)
 				.then(function(data){
 					console.log(data);
+					// update sessionStorage
+					let bookList=JSON.parse(sessionStorage.getItem('userBooks'));
+					let newBook={
+		                bookId:data.id,
+		                name:data.name
+		                }
+					bookList.push(newBook);
+					sessionStorage.setItem('userBooks',JSON.stringify(bookList));
+					// display remainder
 					$('.added-remainder').text('Recipe added!');
 					setTimeout(function(){
 						$('.added-remainder').text('');

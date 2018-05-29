@@ -41,7 +41,7 @@ passport.use(localStrategy);
 passport.use(jwtStrategy);
 
 // serve static asset
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '/public')));
 
 // load view engine
 app.engine('hbs',hbs({extname:'hbs',defaultLayout:'layout',layoutsDir:__dirname+'/views/layouts'}));

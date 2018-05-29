@@ -30,8 +30,7 @@ router.use(bodyParser.json());
 
 // GET method, show all recipe books the user created
 router.get('/', (req, res) => {
-  //console.log(req.query);
-  RecipeBooks.find({})
+  RecipeBooks.find({user:req.cookies.username})
     .then(books => {
       let hbsObj={
         layout:false,
@@ -58,8 +57,8 @@ router.get('/book',(req,res)=>{
         recipesCount:book.recipes.length,
         recipes:book.recipes
       }
+      console.log(hbsObj);
       res.status(200).render(`recipe-books-book`,hbsObj);
-      //res.status(200).json(book);
     })
     .catch(err => res.status(500).json({message: 'Internal server error'}));
 });
@@ -107,13 +106,15 @@ router.post('/',(req,res)=>{
       return res.status(400).send(message);
     }
   }
-
-  // check no duplicate book name
-  if(RecipeBooks.find({name:req.body.name}).count()>0){
-    res.status(400).send('book name already taken, please use a different name!');
-  }else{
-    RecipeBooks.create(
-    	{
+  // check duplicated names
+  let count;
+  RecipeBooks.find({name:req.body.name}).exec(function(err,data){
+    count=data.length;
+    if(count>0){
+      res.status(400).send('book name already taken, please use a different name!');
+    }else{
+    RecipeBooks
+      .create({
         name: req.body.name,
         user: req.cookies['username'],
         recipes: req.body.recipes || [],
@@ -121,14 +122,17 @@ router.post('/',(req,res)=>{
         numberOfRecipes:req.body.recipes?req.body.recipes.length:0
       })
       .then(function(document){
-      	console.log(`Created recipe book ${req.body.name}`);
-        	res.status(201).json(document.serialize());
+        console.log(`Created recipe book ${req.body.name}`);
+        res.status(201).json(document.serialize());
       })
       .catch(err => {
         console.error(err);
         res.status(500).json({ message: 'Internal server error' });
       });
-  }
+    }
+  });
+
+
 });
 
 // PUT update current book
@@ -212,6 +216,8 @@ router.put('/book',(req,res)=>{
 
 // DELETE: req.query supplies bookId
 router.delete('/',(req,res)=>{
+  console.log(req.query);
+  console.log(req.body);
   RecipeBooks
     .findByIdAndRemove(req.query.bookId)
     .then(document => {

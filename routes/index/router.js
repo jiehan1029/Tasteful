@@ -9,8 +9,6 @@ router.get('/',(req,res)=>{
 		searchDone:false,
 		layout:false
 	};
-	//res.render('index.hbs',renderData);
-	//console.log('send file');
 	res.sendFile(path.join(__dirname + '/index.html'));
 });
 

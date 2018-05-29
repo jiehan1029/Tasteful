@@ -3,7 +3,7 @@ const express = require('express');
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
-
+const path=require('path');
 const config = require('../../config');
 const router = express.Router();
 
@@ -46,7 +46,7 @@ router.post('/login', localAuth, (req, res) => {
   // get user's recipe books basic info (bookId and name) from database
   let userBooksList=[];
   RecipeBooks
-    .find({})//user:req.user.username
+    .find({user:req.user.username})
     .then(books=>{
       let bookList=books.map(book=>book.serialize())
       // only need id and name, nothing else
@@ -87,6 +87,13 @@ router.get('/logout',(req,res)=>{
   res.clearCookie('username');
   res.clearCookie('jwt');
   res.status(200).json({message:'user cookie cleared, logout completed'});
+});
+
+router.get('/logout/protected',(req,res)=>{
+  res.clearCookie('username');
+  res.clearCookie('jwt');
+  //console.log(path.join(__dirname,'../../public','logout-protected.html')); 
+  res.sendFile(path.join(__dirname,'../../public','logout-protected.html'));
 })
 
 module.exports = {router};
