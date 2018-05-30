@@ -111,9 +111,9 @@
 					<hr>
 					{{#if userLoggedIn}}
 					<select class='lightbox-book-select'>
-					{{#each userBooks}}
+						{{#each userBooks}}
 						<option value={{bookId}}>{{name}}</option>
-					{{/each}}
+						{{/each}}
 						<option value='newBook'>--- create new book ---</option>
 					</select>
 					<form class='lightbox-new-book-form' hidden>
@@ -132,7 +132,17 @@
 					{{/each}}
 					</ul>
 					<h5 class="h5">Instructions</h5>
-					<div>{{instructions}}</div>
+					{{#each instructions}}
+						{{#if name}}
+							<h6 class="h6">For {{name}}</h6>
+						{{/if}}
+						<ol>
+							{{#steps}}
+							<li>{{step}}</li>
+							{{/steps}}
+						</ol>
+					{{/each}}
+					
 				</div>
 			</div>
 		</script>

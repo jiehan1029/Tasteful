@@ -87,6 +87,10 @@ $('.card-add-new-book-form').on('submit',function(e){
 
             $(newCardHtml).insertBefore('.add-new-book-div');
 
+            // update book count
+            let currCount=parseInt($('.book-count').text())+1;
+            $('.book-count').text(currCount);
+
             // update sessionStorage
             let bookList=JSON.parse(sessionStorage.getItem('userBooks'));
             let newBook={
@@ -110,11 +114,14 @@ $('.card-add-new-book-form').on('submit',function(e){
 $('body').on('click','.card-delete-book-btn',function(e){
     e.stopPropagation();
     let bookId=$(e.target).closest('.card-body').find('a').attr('data-bookId');
+    console.log(bookId);
     const options={
         url:'/recipe-books',
         type:'DELETE',
+        dataType:'json',
+        contentType: "application/json; charset=utf-8",
         data:JSON.stringify({
-            bookId:bookId
+            "bookId":bookId
         })
     };
     $.ajax(options)
@@ -129,6 +136,9 @@ $('body').on('click','.card-delete-book-btn',function(e){
                 }
             }
             sessionStorage.setItem('userBooks',JSON.stringify(currList));
+            // update book count
+            let currCount=parseInt($('.book-count').text())-1;
+            $('.book-count').text(currCount);
             // update page display
             $(e.target).closest('.card').remove();
         })

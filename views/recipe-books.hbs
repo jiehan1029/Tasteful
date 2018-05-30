@@ -34,8 +34,8 @@
 	      <h1 class="h3 alig-center">My Recipe Books</h1>
 	    <header>
 
-		<section class='booksSummary row col-12 col-md-10 offset-md-1 text-left'>
-			<p>You have {{bookCount}} recipe books!</p>
+		<section class='books-summary row col-12 col-md-10 offset-md-1 text-left'>
+			<p>You have <span class='book-count'>{{bookCount}}</span> recipe books!</p>
 		</section>
 
 		<section class='booksResults row align-left col-12 col-md-10 offset-md-1'>
@@ -48,7 +48,7 @@
 			    	<a href='recipe-books/book?bookId={{id}}' data-bookId={{id}}>
 			    		<p class="card-title h5 bookName">{{name}}</p>
 			    	</a>
-			    	<p class="card-text">contains {{contains}} recipes</p>
+			    	<p class="card-text">contains {{contains}}</p>
 			        <p class="card-text bookDescription-container">description: 
 			        	<span class="bookDescription"contenteditable="true">{{description}}</span>
 			        </p>

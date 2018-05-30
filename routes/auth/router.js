@@ -25,23 +25,20 @@ passport.use(localStrategy);
 const localAuth = passport.authenticate('local', {session: false});
 
 router.use(bodyParser.json());
-//router.use(session({ secret: 'thinkful2', cookie: { maxAge: 90000 }}))
 
 // The user provides a username and password to login
 router.post('/login', localAuth, (req, res) => {
-	console.log('request body to auth login is ')
-	console.log(req.body);
 	const authToken = createAuthToken(req.user.serialize());
   // after login, save some info into cookies:
   // auth token (httpOnly), username, and recipe books the user created
   res.cookie('jwt',authToken,
     {
       httpOnly:true,
-      maxAge:900000
+      maxAge:18000000
     });
   res.cookie('username',req.user.username,
     {
-      maxAge:900000
+      maxAge:18000000
     });
   // get user's recipe books basic info (bookId and name) from database
   let userBooksList=[];
@@ -60,9 +57,7 @@ router.post('/login', localAuth, (req, res) => {
       res.status(200).send(arr);
     })
     .catch(err=>{console.log(err);res.status(500).json({message: 'Internal server error'})})
-  
 });
-
 
 // similarly, the strategy needs to be defined and registered
 const jwtAuth = passport.authenticate('jwt', {session: false});
@@ -73,15 +68,14 @@ router.post('/refresh', jwtAuth, (req, res) => {
     res.cookie('jwt',authToken,
       {
         httpOnly:true,
-        maxAge:900000
+        maxAge:18000000
       });
     res.cookie('username',req.user.username,
       {
-        maxAge:900000
+        maxAge:18000000
       });
     res.status(200).json({authToken});
 });
-
 
 router.get('/logout',(req,res)=>{
   res.clearCookie('username');
@@ -92,8 +86,7 @@ router.get('/logout',(req,res)=>{
 router.get('/logout/protected',(req,res)=>{
   res.clearCookie('username');
   res.clearCookie('jwt');
-  //console.log(path.join(__dirname,'../../public','logout-protected.html')); 
   res.sendFile(path.join(__dirname,'../../public','logout-protected.html'));
-})
+});
 
 module.exports = {router};

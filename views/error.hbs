@@ -5,39 +5,32 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 <link rel="stylesheet" href='./error.css'>
 </head>
-<body>
-	
-	<header class='container-fluid'>
+<body>	
+	<header class='container-fluid header-template-container'>
 		<nav class="navbar navbar-expand navbar-light bg-light col-md-10 offset-md-1">
-		  <div class="collapse navbar-collapse">
-		    <ul class="navbar-nav ml-auto">
-		      <li class="nav-item loginToggle">
-		     	<a class="nav-link loginLink" href="#">
-		     		Login/Signup
-		    	</a>
-		      </li>
-		      <li class="nav-item">
-		        <a class="nav-link recipebookLink" href="/recipe-books" hidden>My recipebook</a>
-		      </li>
-		      <li class="nav-item">
-		      	<a class="nav-link logoutLink" hidden href="#">Logout</a>
-		  	  </li>
-		    </ul>
-		  </div>
+		  	<div class="collapse navbar-collapse">
+			    <ul class="navbar-nav ml-auto">
+			      	<li class="nav-item loginToggle">
+			    	</li>
+			    </ul>
+		  	</div>
 		</nav>
-
-		<h1 class='h1 text-center'>Tasteful</h1>
+		<h1 class='pageHeader h1 text-center'><a href="/">Tasteful</a></h1>
 		<p class='lead text-center'>Make. Enjoy. Share.</p>
 	</header>
 
 	<main class='container-fluid'>
-    <header class="row text-center">
-      <h1 class="h2">Oops! something went wrong</h1>
-    <header>
 		<section>
-      <p>We are sorry, but looks like there is an error:</p>
-      <p>{{errorMessage}}</p>
-    </section>
+			<header class="row text-center">
+	      <h1 class="h2">Oops! something went wrong</h1>
+	    <header>
+	    <p>We are sorry, but looks like there is an error:</p>
+	    <p>Code: {{statusCode}}</p>
+	    <p>Message: {{errorMessage}}</p>
+	  </section>
+	  <section>
+	  	<p>Please go back or return to the <a href='/'>Home Page</a></p>
+	  </section>
 		
 	</main>
 	<footer></footer>
@@ -46,7 +39,6 @@
   src="https://code.jquery.com/jquery-3.3.1.min.js"
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
   crossorigin="anonymous"></script>
-  	<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>	
 </body>

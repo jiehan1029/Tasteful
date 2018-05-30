@@ -12,7 +12,6 @@ const recipeBooksSchema = mongoose.Schema({
   user:{type:String, required:true},
   name: {type: String, required: true, unique: true},
   description: {type: String},
-  numberOfRecipes:{type:Number, required:true},
   recipes:[{
     apiId: {type:Number},
     title: {type:String},
@@ -24,7 +23,7 @@ const recipeBooksSchema = mongoose.Schema({
 
 
 recipeBooksSchema.virtual('contains').get(function() {
-  return `${this.numberOfRecipes} recipes`
+  return `${this.recipes.length} recipes`
 }); 
 
 // this is an *instance method* which will be available on all instances of the model. Put whatever data you'd like to expose to users and leave out credentials such as username and password outside the serialize so that user won't have access to it.

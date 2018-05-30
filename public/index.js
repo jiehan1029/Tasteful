@@ -1,8 +1,7 @@
-// to edit instruction section - modify server ajax to send analyzed instruction instead of original instruction
 // add infinite scroll to recipe page
 // add floating side bars for top/login/signup 
 // css: add cursor to indicate recipe card is clickable; adjust size of the lightbox
-
+// refresh jwt token, extended jwt token aga
 
 // compile handlebars templates
 let headerTemplate=Handlebars.compile($('#header-template').html());
@@ -22,20 +21,22 @@ function loadHeader(){
 $('body').on('click','.loginLink', function(e){
 	e.preventDefault();
 	e.stopPropagation();
-		$('#login-modal-container').attr({hidden:false});
-		$.fancybox.open({
-			src:'#login-modal-container',
-			type:'inline',
-			opts:{
-				afterShow:function(instance,current){
-					console.info('show login/signup in modal!')
-				}
+	// clear any remainders
+	$('.login-form').find('.remainder').remove();
+	// show div
+	$('#login-modal-container').attr({hidden:false});
+	$.fancybox.open({
+		src:'#login-modal-container',
+		type:'inline',
+		opts:{
+			afterShow:function(instance,current){
+				console.info('show login/signup in modal!')
 			}
-		});		
-});
+		}
+	});		
+	});
 
 /************** enable login/signup/logout functionality **************/
-
 // enable login
 $('body').on('click','.loginBtn', function(e){
 	e.stopPropagation();
@@ -58,9 +59,14 @@ $('body').on('click','.loginBtn', function(e){
 		loadHeader();
 		console.log(data);
 		sessionStorage.setItem('userBooks', JSON.stringify(data));
+		$.fancybox.close();
 	})
-	.catch(err=>{console.log(err)})
-	$.fancybox.close();
+	.catch(err=>{
+		console.log(err);
+		if(err.status===401){
+			$('.login-form').append(`<p class='.remainder'>Username or password is not correct!</p>`);
+		}
+	})
 });
 
 // enable signup
@@ -102,12 +108,18 @@ $('body').on('click','.signupBtn', function(e){
 			loadHeader();
 			console.log(dataFrLogin);
 			sessionStorage.setItem('userBooks', JSON.stringify(dataFrLogin));
+			// close modal
+			$.fancybox.close();
 		})
-		.catch(err=>{console.log(err)})
-		// close modal
-		$.fancybox.close();
+		.catch(err=>{
+			console.log(err);
+			$('.login-form').append(`<p class='.remainder'>Internal server error!</p>`);
+		})
 	})
-	.catch(err=>{console.log(err)});
+	.catch(err=>{
+		console.log(err);
+		$('.login-form').append(`<p class='.remainder'>Internal server error!</p>`);
+	});
 });
 
 // enable logout 
@@ -124,7 +136,9 @@ $('body').on('click','.logoutLink', function(e){
 			loadHeader();
 			sessionStorage.removeItem('userBooks');
 		})
-		.catch(err=>console.log(err));
+		.catch(err=>{
+			console.log(err);
+		});
 });
 
 /*********** display recipe search results *************/
@@ -170,6 +184,11 @@ $('body').on('click','.card',function(e){
 		hbsObj.userLoggedIn=userLoggedIn;
 		let userBooks=JSON.parse(sessionStorage.getItem('userBooks'));
 		hbsObj.userBooks=userBooks;
+		hbsObj.instructions.map(instruction=>{
+			if(instruction.name===''){
+				instruction.name=false;
+			}
+		});
 		console.log(hbsObj);
 		let html=lightboxTemplate(hbsObj);
 		$('#lightbox-template-container').html(html);
@@ -277,10 +296,14 @@ $('body').on('click','.add-to-book-btn',function(e){
 				// show remainder (only a few seconds), then hide again
 				console.log('PUT book succeeded')
 				console.log(data);
-				$('.added-remainder').text('Recipe added!');
+				if(data.duplicateMessage){
+					$('.added-remainder').text(data.duplicateMessage);
+				}else{
+					$('.added-remainder').text('Recipe added!');
+				}
 				setTimeout(function(){
 					$('.added-remainder').text('');
-				},2000);				
+				},4000);				
 			})
 			.catch(err=>{console.log(err)});
 	}
