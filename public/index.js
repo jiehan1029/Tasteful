@@ -3,8 +3,6 @@
 // css: add cursor to indicate recipe card is clickable; adjust size of the lightbox
 // refresh jwt token, extended jwt token aga
 
-//header picture:
-//<a href="https://www.freepik.com/free-photo/black-pepper-near-salad-and-roasted-chicken_1815279.htm">Designed by Freepik</a>
 
 // compile handlebars templates
 let headerTemplate=Handlebars.compile($('#header-template').html());

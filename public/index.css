@@ -1,12 +1,26 @@
-header{
-	color:red;
+body{ 
+	box-sizing: border-box; 
 }
 
+footer{
+	color:lightgrey;
+	margin-top:50px;
+	text-align:center;
+	font-size:0.6rem;
+}
+
+
+header{
+	height:50vh;
+	background-image: url('http://res.cloudinary.com/rollercoaster/image/upload/v1527746531/519_2x.jpg');
+	background-repeat: no-repeat;
+	background-size: cover;
+} 
 
 input{
 	margin:0;
 	padding:0;
 }
 
-
+/*<a href="https://www.freepik.com/free-vector/vector-cartoon-illustration-of-various-vegetables-on-a-wooden-background_1265794.htm">Designed by Freepik</a>*/
 /* <a href='https://www.freepik.com/free-photo/assorted-ingredient-for-cooking_1639720.htm'>Designed by Freepik</a> */
