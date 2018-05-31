@@ -3,7 +3,20 @@
 <head>
 <title>Tasteful - my recipe books</title>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-<link rel="stylesheet" href='./error.css'>
+<style>
+.error-content{
+	background-color:#ebeef4;
+	border-radius: 5px;
+	padding:10px;
+	margin-top:20px;
+}
+footer{
+	color:lightgrey;
+	margin-top:50px;
+	text-align:center;
+	font-size:0.6rem;
+}
+</style>
 </head>
 <body>	
 	<header class='container-fluid header-template-container'>
@@ -20,20 +33,21 @@
 	</header>
 
 	<main class='container-fluid'>
-		<section>
-			<header class="row text-center">
-	      <h1 class="h2">Oops! something went wrong</h1>
-	    <header>
+		<section class='error-content col-12 col-md-10 offset-md-1 text-center'>
+			<header>
+      	<h1 class="h5 col-12 text-center">Oops! something went wrong</h1>
+    	</header>
 	    <p>We are sorry, but looks like there is an error:</p>
 	    <p>Code: {{statusCode}}</p>
 	    <p>Message: {{errorMessage}}</p>
-	  </section>
-	  <section>
 	  	<p>Please go back or return to the <a href='/'>Home Page</a></p>
 	  </section>
-		
 	</main>
-	<footer></footer>
+
+	<footer>
+		<hr>
+		<p>jiehan1029@gmail.com May 2018</p>
+	</footer>
 
 	<script
   src="https://code.jquery.com/jquery-3.3.1.min.js"

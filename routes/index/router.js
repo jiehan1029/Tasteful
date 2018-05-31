@@ -9,6 +9,7 @@ router.get('/',(req,res)=>{
 		searchDone:false,
 		layout:false
 	};
+	console.log(renderData);
 	res.render('index',renderData);
 	//res.sendFile(path.join(__dirname + '/index.html'));
 });

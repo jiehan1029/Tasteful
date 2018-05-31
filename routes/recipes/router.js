@@ -14,6 +14,7 @@ let searchResultsData;
 
 // search - search recipe endpoint
 function GetRecipesFromApi(req,res){
+  let searchOffset=(req.body.page-1)*20;
   const options={
     method:'GET',
     url:'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search',
@@ -23,8 +24,8 @@ function GetRecipesFromApi(req,res){
     qs:{
       instructionsRequired:true,
       limitLicense:false,
-      number:5, // return 20 recipes
-      offset:0, // # of results to skip
+      number:20, // return 20 recipes
+      offset:searchOffset, // # of results to skip
       cuisine:req.body.cuisine,
       type:req.body.type,
       query:req.body.query
@@ -45,13 +46,15 @@ function GetRecipesFromApi(req,res){
             layout:false
           };
       //res.status(200).json(hbsObj);
+      console.log(hbsObj);
       res.status(200).render('index',hbsObj);
     })
     .catch(function(err){
-      console.error(err);
+      //console.error(err);
       let errorHbs={
         statusCode:500,
-        errorMessage:'Internal Server Error'
+        errorMessage:'Internal Server Error',
+        layout:false
       };
       res.status(500).render('error',errorHbs);      
       //res.status(500).json({message:'Internal Server Error'});
@@ -105,10 +108,11 @@ function GetRecipeInfoFromApi(req,res){
       res.status(200).json(sentData);
     })
     .catch(function(err){
-      console.error(err);
+      //console.error(err);
       let errorHbs={
         statusCode:500,
-        errorMessage:'Internal Server Error'
+        errorMessage:'Internal Server Error',
+        layout:false
       };
       res.status(500).render('error',errorHbs);
       //res.status(500).json({message:'Internal Server Error'});
@@ -117,7 +121,7 @@ function GetRecipeInfoFromApi(req,res){
 
 // POST method - user submits a form to server
 // search 'Spoonacular Search Recipes by natural language' endpoint
-router.post('/',(req, res) => {
+router.get('/',(req, res) => {
   GetRecipesFromApi(req,res);
 });
 

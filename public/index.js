@@ -3,9 +3,12 @@
 // css: add cursor to indicate recipe card is clickable; adjust size of the lightbox
 // refresh jwt token, extended jwt token aga
 
+//header picture:
+//<a href="https://www.freepik.com/free-photo/black-pepper-near-salad-and-roasted-chicken_1815279.htm">Designed by Freepik</a>
+
 // compile handlebars templates
 let headerTemplate=Handlebars.compile($('#header-template').html());
-//let searchTemplate=Handlebars.compile($('#search-template').html());
+let searchTemplate=Handlebars.compile($('#search-template').html());
 let lightboxTemplate=Handlebars.compile($('#lightbox-template').html());
 
 $(loadHeader);
@@ -142,6 +145,66 @@ $('body').on('click','.logoutLink', function(e){
 });
 
 /*********** display recipe search results *************/
+
+$('body').on('click','.form-submit-btn',function(e){
+	e.stopPropagation();
+	// save form search data to sessionStorage
+	let searchTerms={
+		query:$('.search-query').val(),
+		type:$('.search-type').val(),
+		cuisine:$('.search-cuisine').val(),
+		page:1
+	};
+	console.log(searchTerms);
+	sessionStorage.setItem('formSearchTerms',JSON.stringify(searchTerms));
+	console.log('sessionStorage set')
+	// then submit form
+	$('.search-recipe-form').submit();
+	// watch scroll evt
+	watchScroll();
+});
+
+// https://www.sitepoint.com/jquery-infinite-scrolling-demos/
+function watchScroll(){
+	console.log('start watching page scroll');
+	const win=$(window);
+	win.scroll(function(e){
+		// if reach end of the page
+		if($(document).height()-win.height()==win.scrollTop()){
+			// show loading bar
+			//$('#loading').show();
+
+			// ajax call
+			// read from sessionStorage
+			const searchTerms=JSON.parse(sessionStorage.getItem('formSearchTerms'));
+			const options={
+				url:'/recipes',
+				type:'GET',
+				contentType: "application/json; charset=utf-8",
+				dataType:'json',
+				data:{
+					page:searchTerms.page+1,
+					query:searchTerms.query,
+					type:searchTerms.type,
+					cuisine:searchTerms.cuisine
+				}				
+			};
+			$.ajax(options)
+				.then(function(data){
+					console.log('loading new content...');
+					$('.recipe-search-results').append(searchTemplate(data));
+					// update sessionStorage
+					let currTerm=JSON.parse(sessionStorage.getItem('formSearchTerms'));
+					currTerm.page+=1;
+					sessionStorage.setItem('formSearchTerms',JSON.stringify(currTerm));
+				})
+				.catch(err=>{console.log(err)});
+		}
+	});
+
+}
+
+
 // disable html form submission, handle with ajax
 /*
 $('body').on('submit','.search-recipe-form',function(e){
