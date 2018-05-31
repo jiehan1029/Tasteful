@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Tasteful - Make.Enjoy.Share</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+<link rel="stylesheet" href='https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.css'>
+<link rel="stylesheet" href='./index.css'>
+</head>
+<body>
+	<header class='container-fluid header-template-container'>
+	<script id="header-template" type="text/x-handlebars-templates">
+		<nav class="navbar navbar-expand navbar-light bg-light col-md-10 offset-md-1">
+		  	<div class="collapse navbar-collapse">
+			    <ul class="navbar-nav ml-auto">
+				    \{{#if userLoggedIn}}
+				    <li class="nav-item">
+				        <p class="nav-link">Welcome! \{{userLoggedIn}}</p>
+			      	</li>
+			      	<li class="nav-item">
+			        	<a class="nav-link recipebookLink" href="/recipe-books">My recipebook</a>
+			      	</li>
+			      	<li class="nav-item">
+			      		<a class="nav-link logoutLink" href="#">Logout</a>
+			  	  	</li>
+			  	  	\{{else}}
+			      	<li class="nav-item loginToggle">
+			     		<a class="nav-link loginLink" href="#">
+			     		Login/Signup</a>
+			    	</li>
+				    \{{/if}}
+			    </ul>
+		  	</div>
+		</nav>
+		<h1 class='pageHeader h1 text-center'><a href="/">Tasteful</a></h1>
+		<p class='lead text-center'>Make. Enjoy. Share.</p>
+	</script>
+	</header>
+
+	<main class='container-fluid'>
+
+		<form action='/recipes' method='get' class='search-recipe-form row col-12 col-md-10 offset-md-1'>
+			<label for='recipeSearchBox' class='col-12 font-italic'>Find something tastful</label>
+			<input id='recipeSearchBox' class="form-control col-xs-12 col-md-6 search-query" type='text' placeholder="cinnamon apple cake" name='query'>
+			<div class='row col-xs-12 col-md-4'>
+			<select class="form-control col search-cuisine" name='cuisine'>
+				<option value=''>All cuisine</option>
+				<option value='american'>American</option>
+				<option value='caribean'>Caribean</option>
+				<option value='chinese'>Chinese</option>
+				<option value='french'>French</option>
+				<option value='indian'>Indian</option>
+				<option value='italian'>Italian</option>
+				<option value='japanese'>Japanese</option>
+				<option value='jewish'>Jewish</option>
+				<option value='korean'>Korean</option>
+				<option value='mexican'>Mexican</option>
+				<option value='middle easter'>Middle Eastern</option>
+				<option value='nordic'>Nordic</option>
+				<option value='southern'>Southern</option>
+				<option value='spanish'>Spanish</option>
+				<option value='thai'>Thai</option>
+				<option value='vietnamese'>Viewtnamese</option>
+			</select>
+			<select class="form-control col search-type" name='type'>
+				<option value=''>All types</option>
+				<option value='appetizer'>Appetizer</option>
+				<option value='bread'>Bread</option>
+				<option value='breakfast'>Breakfast</option>
+				<option value='dessert'>Dessert</option>
+				<option value='main course'>Main course</option>
+				<option value='salad'>Salad</option>
+				<option value='sauce'>Sauce</option>
+				<option value='side dish'>Side dish</option>
+				<option value='soup'>Soup</option>
+			</select>
+			</div>
+			<p class="btn btn-primary col-md-2">Search</p>
+		</form>
+
+		<div class='search-template-container'>
+			<section class='search-summary row col-12 col-md-10 offset-md-1 text-left'>
+				<p>{{searchSummary}}</p>
+			</section>
+			<section class='searchResults row align-center col-12 col-md-10 offset-md-1'>
+				{{#if searchDone}}
+					{{#each searchResults}}
+					<div class="card align-center col-12 col-sm-6 col-md-4 col-lg-3 " style="width: 18rem;" data-recipeApiId={{id}}>
+					  <img class="card-img-top" src="https://spoonacular.com/recipeImages/{{image}}" alt="photo of {{title}}">
+					  <div class="card-body">
+					    <p class="card-title h5">{{title}}</p>
+					    <p class="card-text">Ready in {{readyInMinutes}} minutes</p>
+					    <p>Serves {{servings}} people</p>
+					  </div>
+					</div>
+					{{/each}}
+				{{/if}}
+			</section>
+		</div>
+
+		<div id='lightbox-template-container'>
+		<script id="lightbox-template" type="text/x-handlebars-templates">
+			<div class="col-10 offset-1 align-center lightbox-recipe-details" style="width: 18rem;" data-recipeApiId="\{{recipeApiId}}">
+				<img class="card-img-top" src="\{{image}}" alt="\{{title}}">
+				<div class="card-body">
+					<h5 class="card-title h5">\{{title}}</h5>
+					<p class="card-text recipe-ready" data-recipeReady=\{{readyInMinutes}}>Ready in \{{readyInMinutes}} minutes</p>
+					<p class='recipe-serving' data-recipeServing=\{{servings}}>Serves \{{servings}} people</p>
+					<hr>
+					\{{#if userLoggedIn}}
+					<select class='lightbox-book-select'>
+						\{{#each userBooks}}
+						<option value=\{{bookId}}>\{{name}}</option>
+						\{{/each}}
+						<option value='newBook'>--- create new book ---</option>
+					</select>
+					<form class='lightbox-new-book-form' hidden>
+						<label>book name: <input type='text' class='lightbox-new-book-name'></label>
+					</form>
+					<button class='add-to-book-btn btn btn-primary'>Add to my recipe book</button>
+					<p class='remainder added-remainder'></p>
+					\{{else}}
+					<p class='remainder'>Please login or signup to save recipe to recipe book</p>
+					\{{/if}}
+					<hr>
+					<h5 class='h5'>Ingredients</h5>
+					<ul>
+					\{{#each extendedIngredients}}
+						<li>\{{originalString}}</li>
+					\{{/each}}
+					</ul>
+					<h5 class="h5">Instructions</h5>
+					\{{#each instructions}}
+						\{{#if name}}
+							<h6 class="h6">For \{{name}}</h6>
+						\{{/if}}
+						<ol>
+							\{{#steps}}
+							<li>\{{step}}</li>
+							\{{/steps}}
+						</ol>
+					\{{/each}}
+				</div>
+			</div>
+		</script>
+		</div>
+
+		<div id='login-modal-container' hidden>
+			<h1 class="h5">Login/Signup to explore more</h1>
+		    <form class="login-form" onsubmit={return false;}>
+				<fieldset>
+				<label for="loginUsername">Username</label>
+			 	<input id="loginUsername" class='login-username' type="text" class="form-control" required>
+			 	<label for="loginPassword">Password</label>
+			 	<input id="loginPassword" class='login-password' type="text" class="form-control" required>
+			 	</fieldset>
+			 	<button type="submit" class="loginBtn btn btn-primary">Log in</button>
+			 	<button class="btn signupBtn">Sign up</button>
+			</form>			
+		</div>
+
+	</main>
+	<footer></footer>
+
+	<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+  	<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>	
+	<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js'></script>
+	<script src='./index.js'></script>
+</body>
+</html>
+

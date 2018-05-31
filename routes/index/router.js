@@ -9,7 +9,8 @@ router.get('/',(req,res)=>{
 		searchDone:false,
 		layout:false
 	};
-	res.sendFile(path.join(__dirname + '/index.html'));
+	res.render('index',renderData);
+	//res.sendFile(path.join(__dirname + '/index.html'));
 });
 
 module.exports = {router};

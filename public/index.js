@@ -5,7 +5,7 @@
 
 // compile handlebars templates
 let headerTemplate=Handlebars.compile($('#header-template').html());
-let searchTemplate=Handlebars.compile($('#search-template').html());
+//let searchTemplate=Handlebars.compile($('#search-template').html());
 let lightboxTemplate=Handlebars.compile($('#lightbox-template').html());
 
 $(loadHeader);
@@ -143,6 +143,7 @@ $('body').on('click','.logoutLink', function(e){
 
 /*********** display recipe search results *************/
 // disable html form submission, handle with ajax
+/*
 $('body').on('submit','.search-recipe-form',function(e){
 	e.preventDefault();
 	e.stopPropagation();
@@ -164,6 +165,7 @@ $('body').on('submit','.search-recipe-form',function(e){
 		})
 		.catch(err=>{console.log(err)});
 });
+*/
 
 /*********** display recipe details in lightbox *************/
 // when user clicks on the recipe card, show details on a lightbox
