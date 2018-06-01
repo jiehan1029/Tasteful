@@ -3,7 +3,6 @@
 // css: add cursor to indicate recipe card is clickable; adjust size of the lightbox
 // refresh jwt token, extended jwt token aga
 
-
 // compile handlebars templates
 let headerTemplate=Handlebars.compile($('#header-template').html());
 let searchTemplate=Handlebars.compile($('#search-template').html());

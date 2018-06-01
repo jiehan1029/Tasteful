@@ -6,85 +6,68 @@
 <link rel="stylesheet" href='./recipe-books.css'>
 </head>
 <body>
-	<header class='container-fluid'>
-		<nav class="navbar navbar-expand navbar-light bg-light col-md-10 offset-md-1">
+	<header class='banner container-fluid'>
+		<nav class="navbar navbar-expand navbar-light col-md-10 offset-md-1">
 		  	<div class="collapse navbar-collapse">
 			    <ul class="navbar-nav ml-auto">
 				    <li class="nav-item header-username-template-container">
-				    <script id="header-username-template" type="text/x-handlebars-templates">
-				        <p class="nav-link">Welcome! \{{userLoggedIn}}</p>
-			      	</script>
+				        <p class='lead'>Welcome! {{username}}</p>
 			      	</li>
 			      	<li class="nav-item">
-			        	<a class="nav-link recipebookLink" href="/recipe-books">My recipebook</a>
+			        	<a class="recipebook-link lead" href="/recipe-books">My recipebook</a>
 			      	</li>
 			      	<li class="nav-item">
-			      		<a class="nav-link logoutLink" href="/auth/logout/protected">Logout</a>
+			      		<a class="logout-link lead" href="/auth/logout/protected">Logout</a>
 			  	  	</li>
 			    </ul>
 		  	</div>
 		</nav>
 		<h1 class='pageHeader h1 text-center'><a href="/">Tasteful</a></h1>
-		<p class='lead text-center'>Make. Enjoy. Share.</p>
+		<p class='lead text-center'>Cook. Enjoy. Share.</p>
 	</header>
 
 	<main class='container-fluid'>
 	
-	    <header class="row col-12 col-md-10 offset-md-1 align-center">
-	      <h1 class="h3 alig-center">My Recipe Books</h1>
-	    <header>
+	    <header class="row col-12 col-md-10 offset-md-1">
+	      <h1 class="h3">My Recipe Books</h1>
+	    </header>
 
-		<section class='books-summary row col-12 col-md-10 offset-md-1 text-left'>
+		<section class='books-summary row col-12 col-md-10 offset-md-1 lead'>
 			<p>You have <span class='book-count'>{{bookCount}}</span> recipe books!</p>
 		</section>
 
 		<section class='booksResults row align-left col-12 col-md-10 offset-md-1'>
 			{{#each bookList}}
-			<div class="card align-left col-12 col-sm-6 col-md-4 col-lg-3 " style="width: 18rem;" data-bookId={{id}}>
+			<div class="card align-left col-12 col-sm-6 col-md-4 col-lg-3 w-100" data-bookId={{id}}>
 				<a href='recipe-books/book?bookId={{id}}' data-bookId={{id}}>
-					<img class="card-img-top" src="http://res.cloudinary.com/rollercoaster/image/upload/v1527180406/193308-OXWPEW-70_1_1.jpg" alt="recipe book cover photo">
+					<img class='card-img-top' src="http://res.cloudinary.com/rollercoaster/image/upload/v1527180406/193308-OXWPEW-70_1_1.jpg" alt="recipe book cover photo">
 				</a>
 			    <div class="card-body">
 			    	<a href='recipe-books/book?bookId={{id}}' data-bookId={{id}}>
 			    		<p class="card-title h5 bookName">{{name}}</p>
 			    	</a>
 			    	<p class="card-text">contains {{contains}}</p>
-			        <p class="card-text bookDescription-container">description: 
-			        	<span class="bookDescription"contenteditable="true">{{description}}</span>
+			        <p class="card-text bookDescription-container">memo: <span class="bookDescription font-italic" contenteditable="true">{{description}}</span>
 			        </p>
-			        <button class='btn card-delete-book-btn'>delete book</button>
+			        <button class='btn btn-sm card-delete-book-btn'>delete book</button>
 				</div>
 			</div>
 			{{/each}}
-			<div class="card align-center add-new-book-div col-12 col-sm-6 col-md-4 col-lg-3 " style="width: 18rem;">
-			    <img src='' class='card-img-top' aria-hidden="true">
+			<div class="card align-center add-new-book-div col-12 col-sm-6 col-md-4 col-lg-3 w-100">
+				<div class='card-img-top'></div>
 			    <div class="card-body">
-				    <p class="card-title h5">Add new book</p>
+				    <p class="card-title h5">New book</p>
 				    <form class='card-add-new-book-form'>
 					    <label for='card-add-new-book-name'>Name</label>
-					    <input type='text' id='card-add-new-book-name' required>
+					    <input class='form-control' type='text' id='card-add-new-book-name' required>
 					    <label for='card-add-new-book-description'>description</label>
-					    <input type='text' id='card-add-new-book-description'>
-					    <button type='submit'>Create new book</button>
+					    <input class='form-control' type='text' id='card-add-new-book-description'>
+					    <button class='btn btn-sm btn-primary' type='submit'>Create new book</button>
 				    </form>
 				    <p class='remainder'></p>
 			    </div>
 			</div>
 		</section>	
-		
-		<div id='login-modal-container' hidden>
-			<h1 class="h5">Login/Signup to explore more</h1>
-		    <form class="login-form" onsubmit={return false;}>
-				<fieldset>
-				<label for="loginUsername">Username</label>
-			 	<input id="loginUsername" class='login-username' type="text" class="form-control" required>
-			 	<label for="loginPassword">Password</label>
-			 	<input id="loginPassword" class='login-password' type="text" class="form-control" required>
-			 	</fieldset>
-			 	<button type="submit" class="loginBtn btn btn-primary">Log in</button>
-			 	<button class="btn signupBtn">Sign up</button>
-			</form>			
-		</div>
 
 	</main>
 
@@ -100,7 +83,6 @@
   	<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
-	<script src='https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js'></script>	
 	<script src='./recipe-books.js'></script>
 </body>
 </html>

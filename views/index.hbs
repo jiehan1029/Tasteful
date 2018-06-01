@@ -1,80 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Tasteful - Make.Enjoy.Share</title>
+<title>Tasteful - Cook.Enjoy.Share</title>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 <link rel="stylesheet" href='https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.css'>
 <link rel="stylesheet" href='./index.css'>
 </head>
 <body>
-	<header class='container-fluid header-template-container'>
+	<header class='banner container-fluid header-template-container'>
 	<script id="header-template" type="text/x-handlebars-templates">
-		<nav class="navbar navbar-expand navbar-light bg-light col-md-10 offset-md-1">
-		  	<div class="collapse navbar-collapse">
+		<nav class="navbar navbar-expand navbar-light col-md-10 offset-md-1">
+		  	<div class="collapse navbar-collapse custom-navbar">
 			    <ul class="navbar-nav ml-auto">
 				    \{{#if userLoggedIn}}
 				    <li class="nav-item">
-				        <p class="nav-link">Welcome! \{{userLoggedIn}}</p>
+				        <p class='lead'>Welcome! \{{userLoggedIn}}</p>
 			      	</li>
 			      	<li class="nav-item">
-			        	<a class="nav-link recipebookLink" href="/recipe-books">My recipebook</a>
+			        	<a class="recipebookLink lead" href="/recipe-books">My recipebook</a>
 			      	</li>
-			      	<li class="nav-item">
-			      		<a class="nav-link logoutLink" href="#">Logout</a>
+			      	<li class="nav-item lead">
+			      		<a class="logoutLink" href="#">Logout</a>
 			  	  	</li>
 			  	  	\{{else}}
 			      	<li class="nav-item loginToggle">
-			     		<a class="nav-link loginLink" href="#">
+			     		<a class="loginLink lead" href="#">
 			     		Login/Signup</a>
 			    	</li>
 				    \{{/if}}
 			    </ul>
 		  	</div>
 		</nav>
-		<h1 class='pageHeader h1 text-center'><a href="/">Tasteful</a></h1>
-		<p class='lead text-center'>Make. Enjoy. Share.</p>
+		<h1 class='pageHeader h1 text-center header-text'><a href="/">Tasteful</a></h1>
+		<p class='lead text-center header-text'>Cook. Enjoy. Share.</p>
 	</script>
 	</header>
 
 	<main class='container-fluid'>
-
-		<form action='/recipes' method='get' class='search-recipe-form row col-12 col-md-10 offset-md-1'>
+		<form action='/recipes' method='get' class='search-recipe-form row form-inline col-12 col-md-10 offset-md-1'>
 			<label for='recipeSearchBox' class='col-12 font-italic'>Find something tasteful</label>
-			<input id='recipeSearchBox' class="form-control col-xs-12 col-md-6 search-query" type='text' placeholder="cinnamon apple cake" name='query'>
-			<div class='row col-xs-12 col-md-4'>
-			<select class="form-control col search-cuisine" name='cuisine'>
-				<option value=''>All cuisine</option>
-				<option value='american'>American</option>
-				<option value='caribean'>Caribean</option>
-				<option value='chinese'>Chinese</option>
-				<option value='french'>French</option>
-				<option value='indian'>Indian</option>
-				<option value='italian'>Italian</option>
-				<option value='japanese'>Japanese</option>
-				<option value='jewish'>Jewish</option>
-				<option value='korean'>Korean</option>
-				<option value='mexican'>Mexican</option>
-				<option value='middle easter'>Middle Eastern</option>
-				<option value='nordic'>Nordic</option>
-				<option value='southern'>Southern</option>
-				<option value='spanish'>Spanish</option>
-				<option value='thai'>Thai</option>
-				<option value='vietnamese'>Viewtnamese</option>
-			</select>
-			<select class="form-control col search-type" name='type'>
-				<option value=''>All types</option>
-				<option value='appetizer'>Appetizer</option>
-				<option value='bread'>Bread</option>
-				<option value='breakfast'>Breakfast</option>
-				<option value='dessert'>Dessert</option>
-				<option value='main course'>Main course</option>
-				<option value='salad'>Salad</option>
-				<option value='sauce'>Sauce</option>
-				<option value='side dish'>Side dish</option>
-				<option value='soup'>Soup</option>
-			</select>
+			<input id='recipeSearchBox' class="form-control col-xs-12 col-sm-12 col-md-6 search-query" type='text' placeholder="cinnamon apple bread" name='query'>
+			<div class='row col-xs-12 col-md-4 select-row'>
+				<select class="form-control col-6 search-cuisine" name='cuisine'>
+					<option value=''>All cuisine</option>
+					<option value='american'>American</option>
+					<option value='caribean'>Caribean</option>
+					<option value='chinese'>Chinese</option>
+					<option value='french'>French</option>
+					<option value='indian'>Indian</option>
+					<option value='italian'>Italian</option>
+					<option value='japanese'>Japanese</option>
+					<option value='jewish'>Jewish</option>
+					<option value='korean'>Korean</option>
+					<option value='mexican'>Mexican</option>
+					<option value='middle easter'>Middle Eastern</option>
+					<option value='nordic'>Nordic</option>
+					<option value='southern'>Southern</option>
+					<option value='spanish'>Spanish</option>
+					<option value='thai'>Thai</option>
+					<option value='vietnamese'>Viewtnamese</option>
+				</select>
+				<select class="form-control col-6 search-type" name='type'>
+					<option value=''>All types</option>
+					<option value='appetizer'>Appetizer</option>
+					<option value='bread'>Bread</option>
+					<option value='breakfast'>Breakfast</option>
+					<option value='dessert'>Dessert</option>
+					<option value='main course'>Main course</option>
+					<option value='salad'>Salad</option>
+					<option value='sauce'>Sauce</option>
+					<option value='side dish'>Side dish</option>
+					<option value='soup'>Soup</option>
+				</select>
 			</div>
-			<p class="form-submit-btn btn btn-primary col-md-2">Search</p>
+			<p class="form-submit-btn btn btn-primary col-xs-12 col-md-2">Search</p>
 		</form>
 
 		<div class='search-template-container'>
@@ -149,9 +148,9 @@
 		    <form class="login-form" onsubmit={return false;}>
 				<fieldset>
 				<label for="loginUsername">Username</label>
-			 	<input id="loginUsername" class='login-username' type="text" class="form-control" required>
+			 	<input id="loginUsername" class='login-username form-control' type="text" class="form-control" required>
 			 	<label for="loginPassword">Password</label>
-			 	<input id="loginPassword" class='login-password' type="text" class="form-control" required>
+			 	<input id="loginPassword" class='login-password form-control' type="text" class="form-control" required>
 			 	</fieldset>
 			 	<button type="submit" class="loginBtn btn btn-primary">Log in</button>
 			 	<button class="btn signupBtn">Sign up</button>

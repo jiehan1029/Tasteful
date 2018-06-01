@@ -34,7 +34,7 @@ router.get('/', (req, res) => {
     .then(books => {
       let hbsObj={
         layout:false,
-        username:req.query.username,
+        username:req.cookies.username,
         bookCount:books.length,
         bookList:books.map(book=>book.serialize())
       }
@@ -59,6 +59,7 @@ router.get('/book',(req,res)=>{
       //console.log(book);
       const hbsObj={
         layout:false,
+        username:req.cookies.username,
         bookTitle:book.name,
         bookId:book.id,
         recipesCount:book.recipes.length,
@@ -142,7 +143,7 @@ router.post('/',(req,res)=>{
         name: req.body.name,
         user: req.cookies['username'],
         recipes: req.body.recipes || [],
-        description: req.body.description || ''
+        description: req.body.description || 'click to edit'
       })
       .then(function(document){
         console.log(`Created recipe book ${req.body.name}`);

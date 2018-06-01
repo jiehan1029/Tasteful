@@ -1,14 +1,4 @@
-let headerUsernameTemplate=Handlebars.compile($('#header-username-template').html());
 let lightboxTemplate=Handlebars.compile($('#lightbox-template').html());
-
-// display header navbar based on user login status
-$(loadHeader);
-
-function loadHeader(){
-  let userLoggedIn=Cookies.get('username')===undefined ? false:Cookies.get('username');
-  let hbsObj={userLoggedIn:userLoggedIn};
-  $('.header-username-template-container').html(headerUsernameTemplate(hbsObj))
-}
 
 /*********** display recipe details in lightbox *************/
 // when user clicks on the recipe card, show details on a lightbox
