@@ -6,6 +6,8 @@ const router = express.Router();
 const request=require('request-promise');
 const bodyParser=require('body-parser');
 
+const {MASHAPE_KEY}=require('../../config');
+
 router.use(bodyParser.urlencoded({extended:true}));
 router.use(bodyParser.json());
 
@@ -14,20 +16,21 @@ let searchResultsData;
 
 // search - search recipe endpoint
 function GetRecipesFromApi(req,res){
+  let searchOffset=(req.query.page-1)*20;
   const options={
     method:'GET',
     url:'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search',
     headers:{
-      'X-Mashape-Key':'37Xj7LDM2MmshuZOtev9ZN6Haux3p12HtOzjsn1NYUwDy9qL9D'
+      'X-Mashape-Key':MASHAPE_KEY
     },
     qs:{
       instructionsRequired:true,
       limitLicense:false,
-      number:5, // return 20 recipes
-      offset:0, // # of results to skip
-      cuisine:req.body.cuisine,
-      type:req.body.type,
-      query:req.body.query
+      number:20, // return 20 recipes
+      offset:searchOffset, // # of results to skip
+      cuisine:req.query.cuisine,
+      type:req.query.type,
+      query:req.query.query
     },
     json:true
   }
@@ -39,19 +42,23 @@ function GetRecipesFromApi(req,res){
     .then(function(data){
       searchResultsData=data;
       let hbsObj={
-            searchSummary:'Found relevant recipes...',
             searchDone:true,
             searchResults:data,
             layout:false
           };
-      res.status(200).json(hbsObj);
-      //res.status(200).render('index',hbsObj);
+      if(req.query.continue){
+        res.status(200).json(hbsObj);
+      }else{
+        hbsObj.searchSummary='Found relevant recipes...';
+        res.status(200).render('index',hbsObj);
+      }
     })
     .catch(function(err){
-      console.error(err);
+      //console.error(err);
       let errorHbs={
         statusCode:500,
-        errorMessage:'Internal Server Error'
+        errorMessage:'Internal Server Error',
+        layout:false
       };
       res.status(500).render('error',errorHbs);      
       //res.status(500).json({message:'Internal Server Error'});
@@ -65,7 +72,7 @@ function GetRecipeInfoFromApi(req,res){
     method:"get",
     url:`https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/${recipeId}/information`,
     headers:{
-      'X-Mashape-Key':'t9elQM8DjDmshmCoAMsWUcNZoMS6p1qZ5zzjsnOFwa9qrvfmIJ',
+      'X-Mashape-Key':MASHAPE_KEY,
       "Accept":"application/json"
     },
     json:true
@@ -105,10 +112,11 @@ function GetRecipeInfoFromApi(req,res){
       res.status(200).json(sentData);
     })
     .catch(function(err){
-      console.error(err);
+      //console.error(err);
       let errorHbs={
         statusCode:500,
-        errorMessage:'Internal Server Error'
+        errorMessage:'Internal Server Error',
+        layout:false
       };
       res.status(500).render('error',errorHbs);
       //res.status(500).json({message:'Internal Server Error'});
@@ -117,7 +125,7 @@ function GetRecipeInfoFromApi(req,res){
 
 // POST method - user submits a form to server
 // search 'Spoonacular Search Recipes by natural language' endpoint
-router.post('/',(req, res) => {
+router.get('/',(req, res) => {
   GetRecipesFromApi(req,res);
 });
 

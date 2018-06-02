@@ -1,14 +1,4 @@
-let headerUsernameTemplate=Handlebars.compile($('#header-username-template').html());
 let lightboxTemplate=Handlebars.compile($('#lightbox-template').html());
-
-// display header navbar based on user login status
-$(loadHeader);
-
-function loadHeader(){
-  let userLoggedIn=Cookies.get('username')===undefined ? false:Cookies.get('username');
-  let hbsObj={userLoggedIn:userLoggedIn};
-  $('.header-username-template-container').html(headerUsernameTemplate(hbsObj))
-}
 
 /*********** display recipe details in lightbox *************/
 // when user clicks on the recipe card, show details on a lightbox
@@ -24,7 +14,14 @@ $('body').on('click','.card',function(e){
 	};
 	$.ajax(options)
 	.then(function(data){
-		let html=lightboxTemplate(data);
+		let hbsObj=data;
+		hbsObj.instructions.map(instruction=>{
+			if(instruction.name===''){
+				instruction.name=false;
+			}
+		});
+		//console.log(hbsObj);
+		let html=lightboxTemplate(hbsObj);
 		$('#lightbox-template-container').html(html);
 	})
 	.then(()=>{

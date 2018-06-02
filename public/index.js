@@ -1,12 +1,8 @@
-// add infinite scroll to recipe page
-// add floating side bars for top/login/signup 
-// css: add cursor to indicate recipe card is clickable; adjust size of the lightbox
-// refresh jwt token, extended jwt token aga
-
 // compile handlebars templates
 let headerTemplate=Handlebars.compile($('#header-template').html());
 let searchTemplate=Handlebars.compile($('#search-template').html());
 let lightboxTemplate=Handlebars.compile($('#lightbox-template').html());
+let sidebarTemplate=Handlebars.compile($('#sidebar-template').html());
 
 $(loadHeader);
 
@@ -14,11 +10,12 @@ $(loadHeader);
 function loadHeader(){
 	let userLoggedIn=Cookies.get('username')===undefined ? false:Cookies.get('username');
 	let hbsObj={userLoggedIn:userLoggedIn};
-	$('.header-template-container').html(headerTemplate(hbsObj))
+	$('.header-template-container').html(headerTemplate(hbsObj));
+	$('.sidebar-login').html(sidebarTemplate(hbsObj));
 }
 
 /*********** Login/Signup modal display *************/
-$('body').on('click','.loginLink', function(e){
+$('body').on('click','.loginLink, .sidebar-login-btn', function(e){
 	e.preventDefault();
 	e.stopPropagation();
 	// clear any remainders
@@ -142,28 +139,69 @@ $('body').on('click','.logoutLink', function(e){
 });
 
 /*********** display recipe search results *************/
-// disable html form submission, handle with ajax
-$('body').on('submit','.search-recipe-form',function(e){
-	e.preventDefault();
+
+$('body').on('click','.form-submit-btn',function(e){
 	e.stopPropagation();
-	const options={
-		url:'/recipes',
-		type:'POST',
-		cache:true,
-		data:{
-			query:$('.search-query').val(),
-			cuisine:$('.search-cuisine').val(),
-			type:$('.search-type').val()
-		},
-		dataType:'json'		
+	// save form search data to sessionStorage
+	let searchTerms={
+		query:$('.search-query').val(),
+		type:$('.search-type').val(),
+		cuisine:$('.search-cuisine').val(),
+		page:1,
+		continue:false
 	};
-	$.ajax(options)
-		.then(function(data){
-			const html=searchTemplate(data);
-			$('.search-template-container').html(html);
-		})
-		.catch(err=>{console.log(err)});
+	// update hidden form data (page)
+	$('.search-page').val(searchTerms.page);
+	//console.log($('.search-page').val());
+	//console.log(searchTerms);
+	sessionStorage.setItem('formSearchTerms',JSON.stringify(searchTerms));
+	//console.log('sessionStorage set')
+	// then submit form
+	$('.search-recipe-form').submit();
+	// watch scroll evt
+	//watchScroll();
 });
+
+$(watchScroll);
+
+// https://www.sitepoint.com/jquery-infinite-scrolling-demos/
+function watchScroll(){
+	console.log('start watching page scroll');
+	const win=$(window);
+	win.scroll(function(e){
+		// if reach end of the page
+		if($(document).height()-win.height()==win.scrollTop()){
+			// show loading bar
+			//$('#loading').show();
+			// ajax call, read req data from sessionStorage
+			const searchTerms=JSON.parse(sessionStorage.getItem('formSearchTerms'));
+			const options={
+				url:'/recipes',
+				type:'GET',
+				contentType: "application/json; charset=utf-8",
+				dataType:'json',
+				data:{
+					page:searchTerms.page+1,
+					query:searchTerms.query,
+					type:searchTerms.type,
+					cuisine:searchTerms.cuisine,
+					continue:true
+				}				
+			};
+			$.ajax(options)
+				.then(function(data){
+					let html=searchTemplate(data);
+					$('.recipe-search-results').append(searchTemplate(data));
+					// update sessionStorage
+					let currTerm=JSON.parse(sessionStorage.getItem('formSearchTerms'));
+					currTerm.page+=1;
+					sessionStorage.setItem('formSearchTerms',JSON.stringify(currTerm));
+				})
+				.catch(err=>{console.log(err)});
+		}
+	});
+
+}
 
 /*********** display recipe details in lightbox *************/
 // when user clicks on the recipe card, show details on a lightbox

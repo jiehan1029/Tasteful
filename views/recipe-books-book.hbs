@@ -7,55 +7,52 @@
 <link rel="stylesheet" href='../recipe-books-book.css'>
 </head>
 <body>
-
-	<header class='container-fluid'>
-		<nav class="navbar navbar-expand navbar-light bg-light col-md-10 offset-md-1">
+	<header class='banner container-fluid'>
+		<nav class="navbar navbar-expand navbar-light col-md-10 offset-md-1">
 		  	<div class="collapse navbar-collapse">
 			    <ul class="navbar-nav ml-auto">
 				    <li class="nav-item header-username-template-container">
-				    <script id="header-username-template" type="text/x-handlebars-templates">
-				        <p class="nav-link">Welcome! \{{userLoggedIn}}</p>
-			      	</script>
+				        <p class='lead'>Welcome! {{username}}</p>
 			      	</li>
 			      	<li class="nav-item">
-			        	<a class="nav-link recipebookLink" href="/recipe-books">My recipebook</a>
+			        	<a class="recipebook-link lead" href="/recipe-books">My recipebook</a>
 			      	</li>
 			      	<li class="nav-item">
-			      		<a class="nav-link logoutLink" href="/auth/logout/protected">Logout</a>
+			      		<a class="logout-link lead" href="/auth/logout/protected">Logout</a>
 			  	  	</li>
 			    </ul>
 		  	</div>
 		</nav>
 		<h1 class='pageHeader h1 text-center'><a href="/">Tasteful</a></h1>
-		<p class='lead text-center'>Make. Enjoy. Share.</p>
+		<p class='lead text-center'>Cook. Enjoy. Share.</p>
 	</header>
 
 	<main class='container-fluid'>
-	    <header class="row text-center">
-	      <h1 class="h2">My Recipe Books - {{bookTitle}}</h1>
+	    <header class="row col-xs-12 col-md-10 offset-md-1">
+	      <h1 class="h2">My Recipe Book - {{bookTitle}}</h1>
 	    </header>
 
-		<section class='recipes-summary row col-12 col-md-10 offset-md-1 text-left'>
-			<p>There are <span class='recipe-count'>{{recipesCount}}</span> recipes in the book</p>
+		<section class='recipes-summary row col-12 col-md-10 offset-md-1'>
+			<p class='lead'>You have <span class='recipe-count'>{{recipesCount}}</span> recipes in this book</p>
 		</section>
 		
 		<section class='recipes-list row align-center col-12 col-md-10 offset-md-1' data-bookId={{bookId}}>
 			{{#each recipes}}
-			<div class="card align-center col-12 col-sm-6 col-md-4 col-lg-3 " style="width: 18rem;" data-recipeApiId={{apiId}}>
+			<div class="card align-center col-12 col-sm-6 col-md-4 col-lg-3 w-100" tabindex="0" data-recipeApiId={{apiId}}>
 			    <img class="card-img-top" src={{imageUrl}} alt="photo of {{title}}">
 			    <div class="card-body">
 			    	<p class="card-title h5">{{title}}</p>
 			    	<p class="card-text">Ready in {{readyInMinutes}} minutes</p>
 			    	<p>Serves {{servings}} people</p>
-			    	<button class='card-delete-recipe-btn'>Delete</button>
+			    	<button class='card-delete-recipe-btn btn btn-sm'>Delete</button>
 			  </div>
 			</div>
 			{{/each}}
-			<div class="card align-center col-12 col-sm-6 col-md-4 col-lg-3 " style="width: 18rem;">
+			<div class="add-new-recipe-div card align-center col-12 col-sm-6 col-md-4 col-lg-3 w-100">
 			    <a href='/'>
-				    <img src='' class='card-img-top' aria-hidden="true">
-				    <div class="card-body">
-					    <p class="card-title h5">Add new recipes</p>
+				    <img class='card-img-top' aria-hidden="true">
+				    <div class="card-body text-center">
+					    <p class="card-title h5">To add new recipe</p>
 					    <p class='lead'>back to search</p>
 				    </div>
 			    </a>
@@ -64,7 +61,7 @@
 
 		<div id='lightbox-template-container'>
 		<script id="lightbox-template" type="text/x-handlebars-templates">
-			<div class="col-10 offset-1 align-center lightbox-recipe-details" style="width: 18rem;" data-recipeApiId="{{recipeApiId}}">
+			<div class="col-10 offset-1 align-center lightbox-recipe-details" style="width: 75%;" data-recipeApiId="{{recipeApiId}}">
 				<img class="card-img-top" src=\{{image}} alt=\{{title}}>
 				<div class="card-body">
 					<h5 class="card-title h5">\{{title}}</h5>
@@ -78,14 +75,26 @@
 					\{{/each}}
 					</ul>
 					<h5 class="h5">Instructions</h5>
-					<div>\{{instructions}}</div>
+					\{{#each instructions}}
+						\{{#if name}}
+							<h6 class="h6">For \{{name}}</h6>
+						\{{/if}}
+						<ol>
+							\{{#steps}}
+							<li>\{{step}}</li>
+							\{{/steps}}
+						</ol>
+					\{{/each}}
 				</div>
 			</div>
 		</script>
 		</div>
 		
 	</main>
-	<footer></footer>
+	<footer>
+		<hr>
+		<p>jiehan1029@gmail.com May 2018</p>
+	</footer>
 
 	<script
   src="https://code.jquery.com/jquery-3.3.1.min.js"

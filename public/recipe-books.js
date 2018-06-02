@@ -1,19 +1,3 @@
-
-// compile handlebars templates
-let headerUsernameTemplate=Handlebars.compile($('#header-username-template').html());
-
-// display header navbar based on user login status
-$(loadHeader);
-
-function loadHeader(){
-  let userLoggedIn=Cookies.get('username')===undefined ? false:Cookies.get('username');
-  let hbsObj={userLoggedIn:userLoggedIn};
-  $('.header-username-template-container').html(headerUsernameTemplate(hbsObj))
-}
-
-/************** display user's recipe books list **************/
-// this is done by server-side handlebar templating
-
 /************* enable book description edit ***************/
 $(editBookDescription);
 

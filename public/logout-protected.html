@@ -1,31 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Tasteful - Make.Enjoy.Share</title>
+<title>Tasteful - Cook.Enjoy.Share</title>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+<style>
+
+body{ 
+	box-sizing: border-box;
+	min-width: 300px;
+}
+
+footer{
+	color:lightgrey;
+	margin-top:50px;
+	text-align:center;
+	font-size:0.6rem;
+}
+
+.banner{
+	height:40vh;
+	margin-bottom: 20px;
+	background-image: url('https://res.cloudinary.com/rollercoaster/image/upload/v1527811909/22.jpg');
+	background-repeat: no-repeat;
+	background-size: cover; 
+	color:white;
+	text-shadow: 2px 2px grey;
+}
+
+.banner::before{
+	display: table;
+	content:'';
+}
+
+.banner h1{
+	margin-top:60px;
+}
+
+.banner a{
+	color:white;
+	text-decoration: none;
+}
+
+.banner a:hover{
+	color:white;
+}
+
+</style>
 </head>
 <body>
-	<header class='container-fluid header-template-container'>
-		<nav class="navbar navbar-expand navbar-light bg-light col-md-10 offset-md-1">
-		  	<div class="collapse navbar-collapse">
-			    <ul class="navbar-nav ml-auto">
-			      	<li class="nav-item loginToggle">
-			    	</li>
-			    </ul>
-		  	</div>
-		</nav>
+	<header class='banner container-fluid header-template-container'>
+		<div></div>
 		<h1 class='pageHeader h1 text-center'><a href="/">Tasteful</a></h1>
-		<p class='lead text-center'>Make. Enjoy. Share.</p>
+		<p class='lead text-center'>Cook. Enjoy. Share.</p>
 	</header>
 
 	<main class='container-fluid'>
-		<section>
+		<section class='col-xs-12 col-md-10 offset-md-1 text-center'>
 			<header>
 				<h2 class='h2'>You have logged out</h2>
 			</header>
 			<p>To continue, please return to the <a href='/'>home page</a>.</p>
 		</section>
-
 	</main>
 	<footer></footer>
 

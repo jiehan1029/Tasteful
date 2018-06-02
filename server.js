@@ -15,13 +15,11 @@ const { router: recipesRouter } = require('./routes/recipes');
 const { router: recipeBooksRouter} = require('./routes/recipe-books');
 const { router: indexRouter} = require('./routes/index');
 
-mongoose.Promise = global.Promise;
-
 const { PORT, DATABASE_URL } = require('./config');
 
+mongoose.Promise = global.Promise;
+
 const app = express();
-
-
 
 app.use(morgan('common'));
 app.use(cookieParser());
@@ -44,9 +42,15 @@ passport.use(jwtStrategy);
 app.use(express.static(path.join(__dirname, '/public')));
 
 // load view engine
-app.engine('hbs',hbs({extname:'hbs',defaultLayout:'layout',layoutsDir:__dirname+'/views/layouts'}));
+app.engine('hbs',hbs({
+  extname:'hbs',
+  defaultLayout:'layout',
+  layoutsDir:__dirname+'/views/layouts'
+  })
+);
 app.set('views',path.join(__dirname,'views'));
 app.set('view engine','hbs');
+
 
 // serve index page
 app.get('/', indexRouter);

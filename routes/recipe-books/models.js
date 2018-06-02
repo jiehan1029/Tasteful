@@ -11,7 +11,7 @@ mongoose.Promise = global.Promise;
 const recipeBooksSchema = mongoose.Schema({
   user:{type:String, required:true},
   name: {type: String, required: true, unique: true},
-  description: {type: String},
+  description: {type: String, default: "click to edit"},
   recipes:[{
     apiId: {type:Number},
     title: {type:String},
