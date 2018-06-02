@@ -38,7 +38,7 @@
 		
 		<section class='recipes-list row align-center col-12 col-md-10 offset-md-1' data-bookId={{bookId}}>
 			{{#each recipes}}
-			<div class="card align-center col-12 col-sm-6 col-md-4 col-lg-3 w-100" data-recipeApiId={{apiId}}>
+			<div class="card align-center col-12 col-sm-6 col-md-4 col-lg-3 w-100" tabindex="0" data-recipeApiId={{apiId}}>
 			    <img class="card-img-top" src={{imageUrl}} alt="photo of {{title}}">
 			    <div class="card-body">
 			    	<p class="card-title h5">{{title}}</p>
@@ -61,7 +61,7 @@
 
 		<div id='lightbox-template-container'>
 		<script id="lightbox-template" type="text/x-handlebars-templates">
-			<div class="col-10 offset-1 align-center lightbox-recipe-details" style="width: 18rem;" data-recipeApiId="{{recipeApiId}}">
+			<div class="col-10 offset-1 align-center lightbox-recipe-details" style="width: 75%;" data-recipeApiId="{{recipeApiId}}">
 				<img class="card-img-top" src=\{{image}} alt=\{{title}}>
 				<div class="card-body">
 					<h5 class="card-title h5">\{{title}}</h5>
@@ -75,7 +75,16 @@
 					\{{/each}}
 					</ul>
 					<h5 class="h5">Instructions</h5>
-					<div>\{{instructions}}</div>
+					\{{#each instructions}}
+						\{{#if name}}
+							<h6 class="h6">For \{{name}}</h6>
+						\{{/if}}
+						<ol>
+							\{{#steps}}
+							<li>\{{step}}</li>
+							\{{/steps}}
+						</ol>
+					\{{/each}}
 				</div>
 			</div>
 		</script>

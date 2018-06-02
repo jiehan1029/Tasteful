@@ -14,7 +14,14 @@ $('body').on('click','.card',function(e){
 	};
 	$.ajax(options)
 	.then(function(data){
-		let html=lightboxTemplate(data);
+		let hbsObj=data;
+		hbsObj.instructions.map(instruction=>{
+			if(instruction.name===''){
+				instruction.name=false;
+			}
+		});
+		//console.log(hbsObj);
+		let html=lightboxTemplate(hbsObj);
 		$('#lightbox-template-container').html(html);
 	})
 	.then(()=>{

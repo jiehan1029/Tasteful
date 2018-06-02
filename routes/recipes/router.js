@@ -6,6 +6,8 @@ const router = express.Router();
 const request=require('request-promise');
 const bodyParser=require('body-parser');
 
+const {MASHAPE_KEY}=require('../../config');
+
 router.use(bodyParser.urlencoded({extended:true}));
 router.use(bodyParser.json());
 
@@ -14,21 +16,21 @@ let searchResultsData;
 
 // search - search recipe endpoint
 function GetRecipesFromApi(req,res){
-  let searchOffset=(req.body.page-1)*20;
+  let searchOffset=(req.query.page-1)*20;
   const options={
     method:'GET',
     url:'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search',
     headers:{
-      'X-Mashape-Key':'37Xj7LDM2MmshuZOtev9ZN6Haux3p12HtOzjsn1NYUwDy9qL9D'
+      'X-Mashape-Key':MASHAPE_KEY
     },
     qs:{
       instructionsRequired:true,
       limitLicense:false,
       number:20, // return 20 recipes
       offset:searchOffset, // # of results to skip
-      cuisine:req.body.cuisine,
-      type:req.body.type,
-      query:req.body.query
+      cuisine:req.query.cuisine,
+      type:req.query.type,
+      query:req.query.query
     },
     json:true
   }
@@ -40,14 +42,16 @@ function GetRecipesFromApi(req,res){
     .then(function(data){
       searchResultsData=data;
       let hbsObj={
-            searchSummary:'Found relevant recipes...',
             searchDone:true,
             searchResults:data,
             layout:false
           };
-      //res.status(200).json(hbsObj);
-      console.log(hbsObj);
-      res.status(200).render('index',hbsObj);
+      if(req.query.continue){
+        res.status(200).json(hbsObj);
+      }else{
+        hbsObj.searchSummary='Found relevant recipes...';
+        res.status(200).render('index',hbsObj);
+      }
     })
     .catch(function(err){
       //console.error(err);
@@ -68,7 +72,7 @@ function GetRecipeInfoFromApi(req,res){
     method:"get",
     url:`https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/${recipeId}/information`,
     headers:{
-      'X-Mashape-Key':'t9elQM8DjDmshmCoAMsWUcNZoMS6p1qZ5zzjsnOFwa9qrvfmIJ',
+      'X-Mashape-Key':MASHAPE_KEY,
       "Accept":"application/json"
     },
     json:true

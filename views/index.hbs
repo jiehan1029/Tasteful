@@ -6,35 +6,8 @@
 <link rel="stylesheet" href='https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.css'>
 <link rel="stylesheet" href='./index.css'>
 </head>
-<body>
-	<header class='banner container-fluid header-template-container'>
-	<script id="header-template" type="text/x-handlebars-templates">
-		<nav class="navbar navbar-expand navbar-light col-md-10 offset-md-1">
-		  	<div class="collapse navbar-collapse custom-navbar">
-			    <ul class="navbar-nav ml-auto">
-				    \{{#if userLoggedIn}}
-				    <li class="nav-item">
-				        <p class='lead'>Welcome! \{{userLoggedIn}}</p>
-			      	</li>
-			      	<li class="nav-item">
-			        	<a class="recipebookLink lead" href="/recipe-books">My recipebook</a>
-			      	</li>
-			      	<li class="nav-item lead">
-			      		<a class="logoutLink" href="#">Logout</a>
-			  	  	</li>
-			  	  	\{{else}}
-			      	<li class="nav-item loginToggle">
-			     		<a class="loginLink lead" href="#">
-			     		Login/Signup</a>
-			    	</li>
-				    \{{/if}}
-			    </ul>
-		  	</div>
-		</nav>
-		<h1 class='pageHeader h1 text-center header-text'><a href="/">Tasteful</a></h1>
-		<p class='lead text-center header-text'>Cook. Enjoy. Share.</p>
-	</script>
-	</header>
+<body class='container-fluid'>
+	<header class='banner header-template-container'></header>
 
 	<main class='container-fluid'>
 		<form action='/recipes' method='get' class='search-recipe-form row form-inline col-12 col-md-10 offset-md-1'>
@@ -73,75 +46,29 @@
 					<option value='soup'>Soup</option>
 				</select>
 			</div>
+			<input class='search-page' name='page' type='number' value=1 hidden=true>
 			<p class="form-submit-btn btn btn-primary col-xs-12 col-md-2">Search</p>
 		</form>
 
-		<div class='search-template-container'>
-			<section class='search-summary row col-12 col-md-10 offset-md-1 text-left'>
-				<p>{{searchSummary}}</p>
-			</section>
-			<section class='recipe-search-results row align-center col-12 col-md-10 offset-md-1'>
-				{{#if searchDone}}
-					{{#each searchResults}}
-					<div class="card align-center col-12 col-sm-6 col-md-4 col-lg-3 " style="width: 18rem;" data-recipeApiId={{id}}>
-					  <img class="card-img-top" src="https://spoonacular.com/recipeImages/{{image}}" alt="photo of {{title}}">
-					  <div class="card-body">
-					    <p class="card-title h5">{{title}}</p>
-					    <p class="card-text">Ready in {{readyInMinutes}} minutes</p>
-					    <p>Serves {{servings}} people</p>
-					  </div>
-					</div>
-					{{/each}}
-				{{/if}}
-			</section>
-		</div>
-
-		<div id='lightbox-template-container'>
-		<script id="lightbox-template" type="text/x-handlebars-templates">
-			<div class="col-10 offset-1 align-center lightbox-recipe-details" style="width: 18rem;" data-recipeApiId="\{{recipeApiId}}">
-				<img class="card-img-top" src="\{{image}}" alt="\{{title}}">
-				<div class="card-body">
-					<h5 class="card-title h5">\{{title}}</h5>
-					<p class="card-text recipe-ready" data-recipeReady=\{{readyInMinutes}}>Ready in \{{readyInMinutes}} minutes</p>
-					<p class='recipe-serving' data-recipeServing=\{{servings}}>Serves \{{servings}} people</p>
-					<hr>
-					\{{#if userLoggedIn}}
-					<select class='lightbox-book-select'>
-						\{{#each userBooks}}
-						<option value=\{{bookId}}>\{{name}}</option>
-						\{{/each}}
-						<option value='newBook'>--- create new book ---</option>
-					</select>
-					<form class='lightbox-new-book-form' hidden>
-						<label>book name: <input type='text' class='lightbox-new-book-name'></label>
-					</form>
-					<button class='add-to-book-btn btn btn-primary'>Add to my recipe book</button>
-					<p class='remainder added-remainder'></p>
-					\{{else}}
-					<p class='remainder'>Please login or signup to save recipe to recipe book</p>
-					\{{/if}}
-					<hr>
-					<h5 class='h5'>Ingredients</h5>
-					<ul>
-					\{{#each extendedIngredients}}
-						<li>\{{originalString}}</li>
-					\{{/each}}
-					</ul>
-					<h5 class="h5">Instructions</h5>
-					\{{#each instructions}}
-						\{{#if name}}
-							<h6 class="h6">For \{{name}}</h6>
-						\{{/if}}
-						<ol>
-							\{{#steps}}
-							<li>\{{step}}</li>
-							\{{/steps}}
-						</ol>
-					\{{/each}}
+		<section class='search-summary row col-12 col-md-10 offset-md-1 text-left'>
+			<p>{{searchSummary}}</p>
+		</section>
+		<section class='recipe-search-results row align-center col-12 col-md-10 offset-md-1'>
+			{{#if searchDone}}
+				{{#each searchResults}}
+				<div class="card align-center col-12 col-sm-6 col-md-4 col-lg-3 w-100" tabindex="0" data-recipeApiId={{id}}>
+				  <img class="card-img-top" src="https://spoonacular.com/recipeImages/{{image}}" alt="photo of {{title}}">
+				  <div class="card-body">
+				    <p class="card-title h5">{{title}}</p>
+				    <p class="card-text">Ready in {{readyInMinutes}} minutes</p>
+				    <p>Serves {{servings}} people</p>
+				  </div>
 				</div>
-			</div>
-		</script>
-		</div>
+				{{/each}}
+			{{/if}}
+		</section>
+
+		<div id='lightbox-template-container'></div>
 
 		<div id='login-modal-container' hidden>
 			<h1 class="h5">Login/Signup to explore more</h1>
@@ -159,34 +86,111 @@
 
 	</main>
 
+	<aside class='float-sidebar text-center'>
+		<div><a href='#'>Top</a></div>
+		<hr>
+		<div class='sidebar-login'>
+		<script id="sidebar-template" type="text/x-handlebars-templates"></script>
+			{{#if userloggedIn}}
+				<a href='/recipe-books'>My recipebook</a>
+			{{else}}
+				<div class='sidebar-login-btn'>Login / Signup</div>
+			{{/if}}
+		</script>
+		</div>
+	</aside>
+
 	<footer>
 		<hr>
 		<p>jiehan1029@gmail.com May 2018</p>
 	</footer>
 
-
-	<script id="search-template" type="text/x-handlebars-templates">
-		<section class='search-summary row col-12 col-md-10 offset-md-1 text-left'>
-			<p>\{{searchSummary}}</p>
-		</section>
-		<section class='searchResults row align-center col-12 col-md-10 offset-md-1'>
-			\{{#if searchDone}}
-				\{{#each searchResults}}
-				<div class="card align-center col-12 col-sm-6 col-md-4 col-lg-3 " style="width: 18rem;" data-recipeApiId=\{{id}}>
-				  <img class="card-img-top" src="https://spoonacular.com/recipeImages/\{{image}}" alt="photo of \{{title}}">
-				  <div class="card-body">
-				    <p class="card-title h5">\{{title}}</p>
-				    <p class="card-text">Ready in \{{readyInMinutes}} minutes</p>
-				    <p>Serves \{{servings}} people</p>
-				  </div>
-				</div>
-				\{{/each}}
-			\{{/if}}
-		</section>	
+	<script id="header-template" type="text/x-handlebars-templates">
+		<nav class="navbar navbar-expand navbar-light col-md-10 offset-md-1">
+		  	<div class="collapse navbar-collapse custom-navbar">
+			    <ul class="navbar-nav ml-auto">
+				    \{{#if userLoggedIn}}
+				    <li class="nav-item">
+				        <p class='lead'>Welcome! \{{userLoggedIn}}</p>
+			      	</li>
+			      	<li class="nav-item">
+			        	<a class="recipebookLink lead" href="/recipe-books">My recipebook</a>
+			      	</li>
+			      	<li class="nav-item lead">
+			      		<a class="logoutLink" href="#">Logout</a>
+			  	  	</li>
+			  	  	\{{else}}
+			      	<li class="nav-item loginToggle">
+			     		<a class="loginLink lead" href="#">
+			     		Login/Signup</a>
+			    	</li>
+				    \{{/if}}
+			    </ul>
+		  	</div>
+		</nav>
+		<h1 class='pageHeader h1 text-center header-text'><a href="/">Tasteful</a></h1>
+		<p class='lead text-center header-text'>Cook. Enjoy. Share.</p>
 	</script>
 
+	<script id="search-template" type="text/x-handlebars-templates">
+		\{{#if searchDone}}
+			\{{#each searchResults}}
+			<div class="card align-center col-12 col-sm-6 col-md-4 col-lg-3 w-100" tabindex="0" data-recipeApiId=\{{id}}>
+			  <img class="card-img-top" src="https://spoonacular.com/recipeImages/\{{image}}" alt="photo of \{{title}}">
+			  <div class="card-body">
+			    <p class="card-title h5">\{{title}}</p>
+			    <p class="card-text">Ready in \{{readyInMinutes}} minutes</p>
+			    <p>Serves \{{servings}} people</p>
+			  </div>
+			</div>
+			\{{/each}}
+		\{{/if}}	
+	</script>
 
-
+	<script id="lightbox-template" type="text/x-handlebars-templates">
+		<div class="align-center lightbox-recipe-details" style="width: 70vw;" data-recipeApiId="\{{recipeApiId}}">
+			<img class="card-img-top" src="\{{image}}" alt="\{{title}}">
+			<div class="card-body">
+				<h5 class="card-title h5">\{{title}}</h5>
+				<p class="card-text recipe-ready" data-recipeReady=\{{readyInMinutes}}>Ready in \{{readyInMinutes}} minutes</p>
+				<p class='recipe-serving' data-recipeServing=\{{servings}}>Serves \{{servings}} people</p>
+				<hr>
+				\{{#if userLoggedIn}}
+				<select class='lightbox-book-select form-control'>
+					\{{#each userBooks}}
+					<option value=\{{bookId}}>\{{name}}</option>
+					\{{/each}}
+					<option value='newBook'>--- create new book ---</option>
+				</select>
+				<form class='lightbox-new-book-form' hidden>
+					<label>book name: <input type='text' class='lightbox-new-book-name form-control'></label>
+				</form>
+				<button class='add-to-book-btn btn btn-sm btn-primary'>Add to my recipe book</button>
+				<p class='remainder added-remainder'></p>
+				\{{else}}
+				<p class='remainder'>Please login or signup to save recipe to recipe book</p>
+				\{{/if}}
+				<hr>
+				<h5 class='h5'>Ingredients</h5>
+				<ul>
+				\{{#each extendedIngredients}}
+					<li>\{{originalString}}</li>
+				\{{/each}}
+				</ul>
+				<h5 class="h5">Instructions</h5>
+				\{{#each instructions}}
+					\{{#if name}}
+						<h6 class="h6">For \{{name}}</h6>
+					\{{/if}}
+					<ol>
+						\{{#steps}}
+						<li>\{{step}}</li>
+						\{{/steps}}
+					</ol>
+				\{{/each}}
+			</div>
+		</div>
+	</script>
 
 	<script
   src="https://code.jquery.com/jquery-3.3.1.min.js"

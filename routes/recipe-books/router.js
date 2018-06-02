@@ -79,6 +79,7 @@ router.get('/book',(req,res)=>{
 });
 
 // GET a specific recipe inside a specific recipe book; request.query supply "bookId" and "recipeId"
+/*
 router.get('/recipe',(req,res)=>{
   // check if that recipe is in the recipebook
   let theBook;
@@ -117,7 +118,7 @@ router.get('/recipe',(req,res)=>{
       res.status(500).render('error',errorHbs);      
       //res.status(500).json({message:'Internal server error'});
     });
-});
+});*/
 
 // POST create new book
 router.post('/',(req,res)=>{
