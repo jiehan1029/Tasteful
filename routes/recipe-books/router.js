@@ -1,5 +1,4 @@
 // this router is for '/recipe-books' endpoint, which is private
-
 const express = require('express');
 const router = express.Router();
 const request=require('request-promise');
@@ -19,7 +18,7 @@ router.get('/', (req, res) => {
         bookCount:books.length,
         bookList:books.map(book=>book.serialize())
       }
-      res.render("recipe-books",hbsObj);
+      res.status(200).render("recipe-books",hbsObj);
     })
     .catch(err => {
       let errorHbs={
@@ -178,7 +177,7 @@ router.put('/book',(req,res)=>{
       .findByIdAndUpdate(req.body.bookId, {$set: {recipes:newList} }, {new:true})
       .then(newBook=>{
         console.log(`update recipe book ${req.body.bookId}`);
-        res.status(200).json(newBook);
+        res.status(204).json(newBook);
       })
   })
   .catch(err => res.status(500).json({ message: 'Internal server error' }));

@@ -74,7 +74,7 @@ describe('test Users endpoint',function(){
         expect(res.body.id).to.not.be.null;
 
         // pass value to next .then()
-        return blogPosts.findById(res.body.id);
+        return Users.findById(res.body.id);
       })
       .then(function(dbItem) {
 				// check db item match request
