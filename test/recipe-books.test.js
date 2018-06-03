@@ -43,7 +43,8 @@ describe('test user auth and recipe-books endpoint',()=>{
 
             //let token=res.cookie.jwt;
             // request protected endpoint
-            describe('GET / endpoint', function() {
+            return 
+              describe('GET / endpoint', function() {
               it('should have status 200', function() {
                 return RecipeBooks
                 .findOne()
@@ -70,10 +71,10 @@ describe('test user auth and recipe-books endpoint',()=>{
                   return {username:dbItem.user,id:dbItem.id};
                 })
                 .then(data=>{
-                  chai.request(app)
+                  agent.request(app)
                   .get(routeToTest)
                   .set('Cookie',`username=${data.username}`)
-                  .set('Cookie',`jwt=${token}`)
+                  //.set('Cookie',`jwt=${token}`)
                   .set('bookId',`${data.id}`)
                   .then(function(_res) {
                     expect(_res).to.have.status(200);
@@ -93,11 +94,11 @@ describe('test user auth and recipe-books endpoint',()=>{
                   description:faker.random.word(),
                   recipes:[]
                 };
-                return chai.request(app)
+                return agent.request(app)
                 .post(routeToTest)
                 .send(newItem)
                 .set('Cookie',`username=${username}`)
-                .set('Cookie',`jwt=${token}`)
+                //.set('Cookie',`jwt=${token}`)
                 .then(function(res) {
                   expect(res).to.have.status(201);
                   expect(res).to.be.json;
@@ -138,11 +139,11 @@ describe('test user auth and recipe-books endpoint',()=>{
                 .findOne()
                 .then(function(dbItem) {
                   updateData.id = dbItem.id;
-                  return chai.request(app)
+                  return agent.request(app)
                   .put(`${routeToTest}/book/${dbItem.id}`)
                   .send(updateData)
                   .set('Cookie',`username=${username}`)
-                  .set('Cookie',`jwt=${token}`);
+                  //.set('Cookie',`jwt=${token}`);
                 })
                 .then(function(res) {
                   // this res is the PUT response, verify response status is as expected
@@ -168,10 +169,10 @@ describe('test user auth and recipe-books endpoint',()=>{
                 .findOne()
                 .then(function(_dbItem) {
                   dbItem = _dbItem;
-                  return chai.request(app)
+                  return agent.request(app)
                     .delete(`${routeToTest}/${dbItem.id}`)
                     .set('Cookie',`username=${username}`)
-                    .set('Cookie',`jwt=${token}`);
+                    //.set('Cookie',`jwt=${token}`);
                 })
                 .then(function(res) {
                   expect(res).to.have.status(204);
