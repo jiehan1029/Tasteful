@@ -4,6 +4,7 @@ const chaiHttp = require('chai-http');
 const {app, runServer, closeServer} = require('../server');
 chai.use(chaiHttp);
 const expect = chai.expect;
+const {MASHAPE_KEY} = require('../config');
 
 describe('test recipes endpoint',function(){
 
@@ -12,6 +13,7 @@ describe('test recipes endpoint',function(){
 			let res;
 			return chai.request(app)
 			.get(routeToTest)
+      .set('X-Mashape-Key', MASHAPE_KEY)
       .then(function(_res) {
         res = _res;
         expect(res).to.have.status(200);
@@ -24,6 +26,7 @@ describe('test recipes endpoint',function(){
       let res;
       return chai.request(app)
       .get(routeToTest)
+      .set('X-Mashape-Key', MASHAPE_KEY)
       .then(function(_res) {
         res = _res;
         expect(res).to.have.status(200);
