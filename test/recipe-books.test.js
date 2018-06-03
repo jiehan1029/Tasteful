@@ -41,8 +41,7 @@ describe('test user auth and recipe-books endpoint',()=>{
             expect(res).to.have.status(200);
             expect(res).to.have.cookie('jwt');
 
-            //let token=res.cookie.jwt;
-            // request protected endpoint
+            // request protected endpoint, use agent instead of chai for request, as agent would have cookie
             return 
               describe('GET / endpoint', function() {
               it('should have status 200', function() {
@@ -55,7 +54,6 @@ describe('test user auth and recipe-books endpoint',()=>{
                   agent.request(app)
                   .get(routeToTest)
                   .set('Cookie',`username=${username}`)
-                  //.set('Cookie',`jwt=${token}`)
                   .then(function(_res) {
                     expect(_res).to.have.status(200);
                   })
@@ -74,7 +72,6 @@ describe('test user auth and recipe-books endpoint',()=>{
                   agent.request(app)
                   .get(routeToTest)
                   .set('Cookie',`username=${data.username}`)
-                  //.set('Cookie',`jwt=${token}`)
                   .set('bookId',`${data.id}`)
                   .then(function(_res) {
                     expect(_res).to.have.status(200);
@@ -98,7 +95,6 @@ describe('test user auth and recipe-books endpoint',()=>{
                 .post(routeToTest)
                 .send(newItem)
                 .set('Cookie',`username=${username}`)
-                //.set('Cookie',`jwt=${token}`)
                 .then(function(res) {
                   expect(res).to.have.status(201);
                   expect(res).to.be.json;
@@ -143,7 +139,6 @@ describe('test user auth and recipe-books endpoint',()=>{
                   .put(`${routeToTest}/book/${dbItem.id}`)
                   .send(updateData)
                   .set('Cookie',`username=${username}`)
-                  //.set('Cookie',`jwt=${token}`);
                 })
                 .then(function(res) {
                   // this res is the PUT response, verify response status is as expected
@@ -172,7 +167,6 @@ describe('test user auth and recipe-books endpoint',()=>{
                   return agent.request(app)
                     .delete(`${routeToTest}/${dbItem.id}`)
                     .set('Cookie',`username=${username}`)
-                    //.set('Cookie',`jwt=${token}`);
                 })
                 .then(function(res) {
                   expect(res).to.have.status(204);
