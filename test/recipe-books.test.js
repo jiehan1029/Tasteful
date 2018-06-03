@@ -41,7 +41,7 @@ describe('test user auth and recipe-books endpoint',()=>{
             expect(res).to.have.status(200);
             expect(res).to.have.cookie('jwt');
 
-            let token=res.cookies.jwt;
+            let token=res.cookie.jwt;
             // request protected endpoint
             describe('GET / endpoint', function() {
               it('should have status 200', function() {
