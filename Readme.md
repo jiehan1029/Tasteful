@@ -48,24 +48,24 @@ Request body supplies book Id to delete.
 ## How The App Looks Like
 The use is self-explanatory. You do not need an account to search for recipes using search text, cuisine and meal types, and all three parameters are optional -- if leave blank, you receive the most trending recipes.
 
-![index-page](index-page.png)
-![search-page](search-page.png)
+![index-page](index-page.PNG)
+![search-page](search-page.PNG)
 
 To add a personal recipebook, login/signup is required. Explore the app with a demo account:
 
 username: demoUser
 password: demoPassword
 
-![login-modal](login-modal.png)
+![login-modal](login-modal.PNG)
 
 Click on the recipe you interested, a lightbox will pop out to show details of that recipe, and option to add to / create new recipebook for loggin user
 
-![recipe-lightbox](recipe-lightbox.png)
+![recipe-lightbox](recipe-lightbox.PNG)
 
 You can then manage your recipebook to view book content, add new book, delet book, edit book memo.
 
-![recipe-book-page](recipe-book-page.png)
-![recipe-book-detail-page](recipe-book-detail-page.png)
+![recipe-book-page](recipe-book-page.PNG)
+![recipe-book-detail-page](recipe-book-detail-page.PNG)
 
 Enjoy!
 

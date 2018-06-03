@@ -8,7 +8,7 @@ chai.use(chaiHttp);
 // for code using should syntax, check the bottom part of this file.
 const expect = chai.expect;
 
-describe('test GET index page',function(){
+describe('test index endpoint',function(){
 	// use nested `describe` blocks to make clearer, more discrete tests
   describe('GET endpoint', function() {
 		it('should render index page', function() {
