@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 /* the server.js or app.js must has appropriate export  */
 const {app, runServer, closeServer} = require('../server');
 /* replace blogPosts to the module name exported in models.js, also need to find & replace all blogPosts variable to the name you changed*/
-const {Users} = require('../../routes/users/models');
+const {Users} = require('../routes/users/models');
 /* verify the exported module name in config.js */
 const {TEST_DATABASE_URL} = require('../config');
 
