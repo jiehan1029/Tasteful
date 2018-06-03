@@ -97,6 +97,7 @@ describe('test recipe-books endpoint',function(){
       return chai.request(app)
       .post(routeToTest)
       .send(newItem)
+      .set('Cookie',`username=${username}`)
       .then(function(res) {
         expect(res).to.have.status(201);
         expect(res).to.be.json;
@@ -139,7 +140,8 @@ describe('test recipe-books endpoint',function(){
         updateData.id = dbItem.id;
         return chai.request(app)
         .put(`${routeToTest}/book/${dbItem.id}`)
-        .send(updateData);
+        .send(updateData)
+        .set('Cookie',`username=${username}`);
       })
       .then(function(res) {
 				// this res is the PUT response, verify response status is as expected
@@ -165,7 +167,7 @@ describe('test recipe-books endpoint',function(){
 			.findOne()
       .then(function(_dbItem) {
         dbItem = _dbItem;
-        return chai.request(app).delete(`${routeToTest}/${dbItem.id}`);
+        return chai.request(app).delete(`${routeToTest}/${dbItem.id}`).set('Cookie',`username=${username}`);
       })
       .then(function(res) {
         expect(res).to.have.status(204);
