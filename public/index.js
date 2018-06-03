@@ -1,4 +1,3 @@
-// compile handlebars templates
 let headerTemplate=Handlebars.compile($('#header-template').html());
 let searchTemplate=Handlebars.compile($('#search-template').html());
 let lightboxTemplate=Handlebars.compile($('#lightbox-template').html());

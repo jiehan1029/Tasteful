@@ -1,23 +1,4 @@
 // this router is for '/recipe-books' endpoint, which is private
-// GET '/' list all recipe books of the user
-// GET '/book' retrieve a specific book by id, request.query supplies bookId
-// GET '/recipe' retrieve a specific recipe inside a specific book, request.query supplies bookId and recipeId
-// POST '/'  must supply "name" and "user"
-// PUT '/book'  supplies editBook:"add" or "delete" to indicate add or delete recipe and supplies recipes apiID (not database _id) for adding or deleting recipes
-/*
-request.body={
-  bookId:String,
-  name:String,
-  description:String,
-  editBook:String // only allows "add" or "delete"
-  recipe:{
-    apiId:Number,
-    title:String,
-    ...
-  } // recipe is the json response from 3rd party api (recipeInformation), apiId is 3rd party api id
-}
-*/
-// DELETE '/' request.query supplies bookId
 
 const express = require('express');
 const router = express.Router();
@@ -43,10 +24,10 @@ router.get('/', (req, res) => {
     .catch(err => {
       let errorHbs={
         statusCode:500,
-        errorMessage:'Internal Server Error'
+        errorMessage:'Internal Server Error',
+        layout:false
       };
       res.status(500).render('error',errorHbs);      
-      //res.status(500).json({message: 'Internal server error'});
     });
 });
 
@@ -71,54 +52,12 @@ router.get('/book',(req,res)=>{
     .catch(err => {
       let errorHbs={
         statusCode:500,
-        errorMessage:'Internal Server Error'
+        errorMessage:'Internal Server Error',
+        layout:false
       };
       res.status(500).render('error',errorHbs);      
-      //res.status(500).json({message: 'Internal server error'});
     });
 });
-
-// GET a specific recipe inside a specific recipe book; request.query supply "bookId" and "recipeId"
-/*
-router.get('/recipe',(req,res)=>{
-  // check if that recipe is in the recipebook
-  let theBook;
-  RecipeBooks.findById(req.query.bookId)
-    .then(book=>{
-      theBook=book;
-      return theBook;
-    })
-    .then(theBook=>{
-      let recipes=theBook.recipes;
-      let found=false;
-      for(let i=0;i<recipes.length;i++){
-        if(recipes[i]._id.toString()===req.query.recipeId){
-          found=true;
-          console.log(`found recipe ${req.query.recipeId} in book ${req.query.bookId}`)
-          res.status(200).json(recipes[i]);
-          break;
-        }
-      }
-      if(!found){
-        console.log(`cannot find recipe in the book`);
-        let errorHbs={
-          statusCode:400,
-          errorMessage:'Cannot find requested recipe in the book'
-        };
-        res.status(400).render('error',errorHbs);        
-        //res.status(404).json({message:"Cannot find requested recipe in the specified book"})
-        }
-      })
-    .catch((err)=>{
-      console.log('Error in searching database');
-      let errorHbs={
-        statusCode:500,
-        errorMessage:'Internal Server Error'
-      };
-      res.status(500).render('error',errorHbs);      
-      //res.status(500).json({message:'Internal server error'});
-    });
-});*/
 
 // POST create new book
 router.post('/',(req,res)=>{
@@ -154,10 +93,10 @@ router.post('/',(req,res)=>{
         console.error(err);
         let errorHbs={
           statusCode:500,
-          errorMessage:'Internal Server Error'
+          errorMessage:'Internal Server Error',
+          layout:false
         };
         res.status(500).render('error',errorHbs);        
-        //res.status(500).json({ message: 'Internal server error' });
       });
     }
   });
@@ -245,7 +184,7 @@ router.put('/book',(req,res)=>{
   .catch(err => res.status(500).json({ message: 'Internal server error' }));
 });
 
-// DELETE: req.query supplies bookId
+// DELETE: req.body supplies bookId
 router.delete('/',(req,res)=>{
   console.log('receive request to delete book '+req.body.bookId);
   RecipeBooks

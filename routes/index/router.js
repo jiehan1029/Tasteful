@@ -11,7 +11,6 @@ router.get('/',(req,res)=>{
 	};
 	console.log(renderData);
 	res.render('index',renderData);
-	//res.sendFile(path.join(__dirname + '/index.html'));
 });
 
 module.exports = {router};

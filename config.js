@@ -1,6 +1,6 @@
 'use strict';
-exports.DATABASE_URL = process.env.DATABASE_URL || 'mongodb://localhost/recipe-app';
-exports.TEST_DATABASE_URL = process.env.TEST_DATABASE_URL || 'mongodb://localhost/recipe-app-test';
+// use mlab database for consistency
+exports.DATABASE_URL = 'mongodb://admin:admin@ds127490.mlab.com:27490/thinkful-capstone-2-app';
 exports.PORT = process.env.PORT || 8080;
 exports.JWT_SECRET = process.env.JWT_SECRET;
 exports.JWT_EXPIRY = process.env.JWT_EXPIRY || '7d';

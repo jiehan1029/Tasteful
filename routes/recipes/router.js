@@ -54,14 +54,12 @@ function GetRecipesFromApi(req,res){
       }
     })
     .catch(function(err){
-      //console.error(err);
       let errorHbs={
         statusCode:500,
         errorMessage:'Internal Server Error',
         layout:false
       };
       res.status(500).render('error',errorHbs);      
-      //res.status(500).json({message:'Internal Server Error'});
     });
 }
 
@@ -80,23 +78,6 @@ function GetRecipeInfoFromApi(req,res){
 
   request(options)
     .then(function(data){
-      /*
-      let hbsRecipeDetailsObj={
-            searchSummary:'Found recipes...',
-            searchDone:true,
-            searchResults:searchResultsData,
-            layout:false,
-            recipeDetails:{
-              title:data.title,
-              image:data.image,
-              servings:data.servings,
-              readyInMinutes:data.readyInMinutes,
-              extendedIngredients:data.extendedIngredients,
-              instructions:data.instructions
-            }
-          };
-          */
-      //console.log(hbsRecipeDetailsObj);
       console.log(data.analyzedInstructions);
       let analyzedInstructions=data.analyzedInstructions;
       const sentData={
@@ -106,13 +87,11 @@ function GetRecipeInfoFromApi(req,res){
               servings:data.servings,
               readyInMinutes:data.readyInMinutes,
               extendedIngredients:data.extendedIngredients,
-              instructions:data.analyzedInstructions
-              //instructions:data.instructions        
+              instructions:data.analyzedInstructions       
             };
       res.status(200).json(sentData);
     })
     .catch(function(err){
-      //console.error(err);
       let errorHbs={
         statusCode:500,
         errorMessage:'Internal Server Error',

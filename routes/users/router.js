@@ -1,18 +1,3 @@
-// this is a template for creating user account and store in database
-// it is named as 'router.js', placed inside './users/' folder, and binds to 'server.js' (node-with-JWT-auth-server.js) file via 'index.js' inside './users/' folder
-// also inside './users/' folder should be a 'models.js', where the users database model is defined, and linked to this router.js
-
-/*
-brief:
-  1) check input (request.body) contains required fields
-  2) check input fields have right type
-  3) check input fields are trimmed (whitespace)
-  4) check input fields are within size range
-  5) check input doesn't conflict with existing account in the database
-  6) if all above passed, create a new document and save into database
-*/
-
-
 'use strict';
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -139,20 +124,11 @@ router.post('/', jsonParser, verifyPostReq, (req, res) => {
       }
       let errorHbs={
         statusCode:500,
-        errorMessage:'Internal Server Error'
+        errorMessage:'Internal Server Error',
+        layout:false
       };
       res.status(500).render('error',errorHbs);
-      //res.status(500).json({code: 500, message: 'Internal server error'});
     });
 });
-
-// Never expose all your users like below in a prod application we're just doing this so we have a quick way to see if we're creating users. keep in mind, you can also verify this in the Mongo shell.
-/*
-router.get('/', (req, res) => {
-  return Users.find()
-    .then(users => res.json(users.map(user => user.serialize())))
-    .catch(err => res.status(500).json({message: 'Internal server error'}));
-});
-*/
 
 module.exports = {router};

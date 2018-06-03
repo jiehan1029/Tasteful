@@ -67,7 +67,6 @@ $('body').on('click','.card-delete-recipe-btn',function(e){
 			// update page display
 			$(e.target).closest('.card').remove();
 			// update sessionStorage (update book recipe count)
-			
 		})
 		.catch(err=>{
 			console.log(err);

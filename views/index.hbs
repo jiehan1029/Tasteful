@@ -76,9 +76,9 @@
 		    <form class="login-form" onsubmit={return false;}>
 				<fieldset>
 				<label for="loginUsername">Username</label>
-			 	<input id="loginUsername" class='login-username form-control' type="text" class="form-control" required>
+			 	<input id="loginUsername" class='login-username form-control' type="text" class="form-control" placeholder="demoUser" required>
 			 	<label for="loginPassword">Password</label>
-			 	<input id="loginPassword" class='login-password form-control' type="text" class="form-control" required>
+			 	<input id="loginPassword" class='login-password form-control' type="text" class="form-control" placeholder="demoPassword" required>
 			 	</fieldset>
 			 	<button type="submit" class="loginBtn btn btn-primary">Log in</button>
 			 	<button class="btn signupBtn">Sign up</button>
@@ -90,14 +90,7 @@
 	<aside class='float-sidebar text-center'>
 		<div><a href='#'>Top</a></div>
 		<hr>
-		<div class='sidebar-login'>
-		<script id="sidebar-template" type="text/x-handlebars-templates"></script>
-			{{#if userloggedIn}}
-				<a href='/recipe-books'>My recipebook</a>
-			{{else}}
-				<div class='sidebar-login-btn'>Login / Signup</div>
-			{{/if}}
-		</script>
+		<div class='sidebar-login sidebar-template-container'>
 		</div>
 	</aside>
 
@@ -133,6 +126,14 @@
 		<p class='lead text-center header-text'>Cook. Enjoy. Share.</p>
 	</script>
 
+	<script id="sidebar-template" type="text/x-handlebars-templates">
+		\{{#if userLoggedIn}}
+			<a href='/recipe-books'>My recipebook</a>
+		\{{else}}
+			<div class='sidebar-login-btn'>Login / Signup</div>
+		\{{/if}}
+	</script>
+
 	<script id="search-template" type="text/x-handlebars-templates">
 		\{{#if searchDone}}
 			\{{#each searchResults}}
@@ -158,6 +159,7 @@
 				<hr>
 				\{{#if userLoggedIn}}
 				<select class='lightbox-book-select form-control'>
+					<option> </option>
 					\{{#each userBooks}}
 					<option value=\{{bookId}}>\{{name}}</option>
 					\{{/each}}

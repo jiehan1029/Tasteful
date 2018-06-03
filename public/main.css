@@ -34,7 +34,6 @@ footer{
 }
 
 .banner h1{
-	margin-top:30px;
 	font-size:5rem;
 }
 
@@ -68,6 +67,20 @@ nav li{
 	padding-left:10px;
 	padding-right: 10px;
 }
+
+@media screen and (max-width: 550px){
+	.banner h1{
+		font-size: 3rem;
+	}
+	.banner p{
+		font-size: 1rem;
+	}
+	.nav-item p, .nav-item a{
+		font-size:1rem;
+		font-weight: bold !important;
+	} 
+}
+
 
 /* login form styling */
 .login-form .btn{

@@ -43,14 +43,11 @@ app.use(express.static(path.join(__dirname, '/public')));
 
 // load view engine
 app.engine('hbs',hbs({
-  extname:'hbs',
-  defaultLayout:'layout',
-  layoutsDir:__dirname+'/views/layouts'
+  extname:'hbs'
   })
 );
 app.set('views',path.join(__dirname,'views'));
 app.set('view engine','hbs');
-
 
 // serve index page
 app.get('/', indexRouter);
@@ -66,8 +63,6 @@ const jwtAuth = passport.authenticate('jwt', { session: false });
 
 // A protected endpoint which needs a valid JWT to access it
 app.use('/recipe-books/',jwtAuth,recipeBooksRouter);
-
-// add other routers as needed
 
 // catch any un-specified path
 app.use('*', (req, res) => {
