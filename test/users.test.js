@@ -67,19 +67,17 @@ describe('test Users endpoint',function(){
         expect(res).to.be.json;
         expect(res.body).to.be.a('object');
         expect(res.body).to.include.keys('username');
-				
 				// check response match request
         expect(res.body.username).to.equal(newItem.username);
         // cause Mongo should have created id on insertion
         expect(res.body.id).to.not.be.null;
-
         // pass value to next .then()
+        console.log(res.body.id)
         return Users.findById(res.body.id);
       })
       .then(function(dbItem) {
 				// check db item match request
         expect(dbItem.username).to.equal(newItem.username);
-        expect(dbItem.password).to.equal(newItem.password);
       });
     });
   });	
