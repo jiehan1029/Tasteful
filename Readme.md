@@ -6,10 +6,10 @@ To try this app live, visit here.
 ## API Documentation
 Endpoints on the server side include:
 ### '/' - index page
-#### GET
+#### GET '/'
 No data required in request. Render the index page with Handlebars template as response.
 ### '/users' - user registration
-#### POST
+#### POST '/'
 "username" and "password" are required in request body. Both parameters cannot start or end with white space, and password must be at least 4 characters and at most 72 characters long.
 ### '/auth' - user authentication
 #### POST '/login'
@@ -19,7 +19,7 @@ Logout a user and clear relavent cookies and sessionStorage.
 #### GET '/logout/protected'
 If the user was in a protected page before logout, call this endpoint so that a logout page would render to direct the user back to index page.
 ### '/recipes'
-#### GET
+#### GET '/'
 This endpoint will call a third-party api for recipe search. 
 Request query may supply the following:
 
