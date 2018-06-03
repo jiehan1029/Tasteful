@@ -13,7 +13,6 @@ describe('test recipes endpoint',function(){
 			let res;
 			return chai.request(app)
 			.get(routeToTest)
-      .set('X-Mashape-Key', MASHAPE_KEY)
       .then(function(_res) {
         res = _res;
         expect(res).to.have.status(200);
@@ -26,6 +25,7 @@ describe('test recipes endpoint',function(){
       let res;
       return chai.request(app)
       .get(routeToTest)
+      .set('recipeApiId',518323)
       .set('X-Mashape-Key', MASHAPE_KEY)
       .then(function(_res) {
         res = _res;

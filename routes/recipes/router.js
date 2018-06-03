@@ -16,7 +16,7 @@ let searchResultsData;
 
 // search - search recipe endpoint
 function GetRecipesFromApi(req,res){
-  let searchOffset=(req.query.page-1)*20;
+  let searchOffset=(req.query.page-1)*20 || 1;
   const options={
     method:'GET',
     url:'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search',
