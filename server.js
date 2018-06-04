@@ -15,7 +15,7 @@ const { router: recipesRouter } = require('./routes/recipes');
 const { router: recipeBooksRouter} = require('./routes/recipe-books');
 const { router: indexRouter} = require('./routes/index');
 
-const { PORT, DATABASE_URL } = require('./config');
+const { DATABASE_URL } = require('./config');
 
 mongoose.Promise = global.Promise;
 
