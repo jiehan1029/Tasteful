@@ -123,6 +123,7 @@ router.put('/book',(req,res)=>{
   // update name and description first
   RecipeBooks.findByIdAndUpdate(req.body.bookId, {$set: toUpdate}, {new:true})
     .then(book=>{
+      let dataToPass=null;
       console.log('book name or description updated');
       // update recipes (if applicable)
       const recipeInBook=book.recipes;
@@ -138,7 +139,7 @@ router.put('/book',(req,res)=>{
             if(targetRecipeList[i].apiId.toString()===req.body.recipe.apiId){
               toAdd=false;
               console.log('no recipe added because it is in the book already');
-              res.json({duplicateMessage:'no recipe added because it is in the book already'});
+              dataToPass={duplicateMessage:'no recipe added because it is in the book already'};
               break;
             }
           }
@@ -168,15 +169,24 @@ router.put('/book',(req,res)=>{
         console.log(message);
         res.status(400).json({message:message});
       }
-      return targetRecipeList;
+      let data={
+        "message":dataToPass,
+        "list":targetRecipeList
+      };
+      return data;
     })
-  .then(newList=>{
-    RecipeBooks
-      .findByIdAndUpdate(req.body.bookId, {$set: {recipes:newList} }, {new:true})
-      .then(newBook=>{
-        console.log(`update recipe book ${req.body.bookId}`);
-        res.status(204).json(newBook);
-      })
+  .then(data=>{
+    if(data.message){
+      res.status(200).json(data.message);
+    }else{
+      RecipeBooks
+        .findByIdAndUpdate(req.body.bookId, {$set: {recipes:data.list} }, {new:true})
+        .then(newBook=>{
+          console.log(`update recipe book ${req.body.bookId}`);
+          console.log(newBook);
+          res.status(200).json(data);
+        })
+    }
   })
   .catch(err => res.status(500).json({ message: 'Internal server error' }));
 });

@@ -1,5 +1,7 @@
 let lightboxTemplate=Handlebars.compile($('#lightbox-template').html());
 
+let recipeId,bookId,deletedCard;
+
 /*********** display recipe details in lightbox *************/
 // when user clicks on the recipe card, show details on a lightbox
 $('body').on('click','.card',function(e){
@@ -39,10 +41,10 @@ $('body').on('click','.card',function(e){
 });
 
 /******* enable deleting recipe from book *********/
-$('body').on('click','.card-delete-recipe-btn',function(e){
+$('body').on('click','.confirm-delete-recipe',function(e){
 	e.stopPropagation();
-	const recipeId=$(e.target).closest('.card').attr('data-recipeApiId');
-	const bookId=$(e.target).closest('.recipes-list').attr('data-bookId');
+	//const recipeId=$(e.target).closest('.card').attr('data-recipeApiId');
+	//const bookId=$(e.target).closest('.recipes-list').attr('data-bookId');
 	//console.log(recipeId);
 	//console.log(bookId);
 	// make PUT request to delete recipe from the book
@@ -65,10 +67,26 @@ $('body').on('click','.card-delete-recipe-btn',function(e){
 			let currCount=parseInt($('.recipe-count').text())-1;
 			$('.recipe-count').text(currCount);
 			// update page display
-			$(e.target).closest('.card').remove();
+			deletedCard.remove();
+			//$(e.target).closest('.card').remove();
 			// update sessionStorage (update book recipe count)
 		})
 		.catch(err=>{
 			console.log(err);
 		});
+});
+
+// display confirm deletion modal
+$('body').on('click','.card-delete-recipe-btn',function(e){
+	e.stopPropagation();
+    // clear global records
+    recipeId=null;
+    bookId=null;
+    deletedCard=null;
+    // trigger the modal
+    $('#deletionModal').modal();
+    // log global records
+    recipeId=$(e.target).closest('.card').attr('data-recipeApiId');
+    bookId=$(e.target).closest('.recipes-list').attr('data-bookId');
+    deletedCard=$(e.target).closest('.card');
 });

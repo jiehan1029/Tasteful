@@ -26,6 +26,10 @@
 	background-color: yellow;
 }
 
+.card-delete-recipe-btn:hover{
+	border:1px solid darkgrey;
+	box-shadow: 2px 2px 2px darkgrey;
+}
 
 /* override fancybox default setting */
 @media screen and (max-width:700px){

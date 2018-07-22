@@ -1,5 +1,6 @@
 /************* enable book description edit ***************/
 $(editBookDescription);
+let bookId, deletedCard;
 
 function editBookDescription(){
 	$('.bookDescription').blur(function(e){
@@ -94,10 +95,9 @@ $('.card-add-new-book-form').on('submit',function(e){
 })
 
 /************* enable deleting book ***************/
+// actual deletion
 $('body').on('click','.card-delete-book-btn',function(e){
     e.stopPropagation();
-    let bookId=$(e.target).closest('.card-body').find('a').attr('data-bookId');
-    //console.log(bookId);
     const options={
         url:'/recipe-books',
         type:'DELETE',
@@ -123,10 +123,25 @@ $('body').on('click','.card-delete-book-btn',function(e){
             let currCount=parseInt($('.book-count').text())-1;
             $('.book-count').text(currCount);
             // update page display
-            $(e.target).closest('.card').remove();
+            deletedCard.remove();
         })
         .catch(err=>{
             console.log(err);
         })
 });
+
+// display confirm deletion modal
+$('body').on('click','.deletion-modal-trigger',function(e){
+    e.stopPropagation();
+    // clear bookId and card records
+    bookId=null;
+    deletedCard=null;
+    // trigger the modal
+    $('#deletionModal').modal();
+    // log bookid
+    bookId=$(e.target).closest('.card-body').find('a').attr('data-bookId');
+    deletedCard=$(e.target).closest('.card');
+});
+
+
 
