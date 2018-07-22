@@ -1,7 +1,7 @@
 # Tasteful
 Search from thousand of delicious recipes, add them into your personal recipebook, and make something tasteful!
 
-To try this app live, visit here.
+To try this app live, visit [here](https://tasteful.herokuapp.com/).
 
 ## API Documentation
 Endpoints on the server side include:
