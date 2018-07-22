@@ -20,7 +20,7 @@ function editBookDescription(){
         };
         $.ajax(options)
         .then(data=>{
-        	console.log('update book description successfully')
+        	//console.log('update book description successfully')
         });
 	});
 }
@@ -42,8 +42,7 @@ $('.card-add-new-book-form').on('submit',function(e){
     };
     $.ajax(options)
         .then(function(data){
-
-            console.log(data);
+            //console.log(data);
             $('#card-add-new-book-name').val('');
             $('#card-add-new-book-description').val('');
 
@@ -98,7 +97,7 @@ $('.card-add-new-book-form').on('submit',function(e){
 $('body').on('click','.card-delete-book-btn',function(e){
     e.stopPropagation();
     let bookId=$(e.target).closest('.card-body').find('a').attr('data-bookId');
-    console.log(bookId);
+    //console.log(bookId);
     const options={
         url:'/recipe-books',
         type:'DELETE',
@@ -110,7 +109,7 @@ $('body').on('click','.card-delete-book-btn',function(e){
     };
     $.ajax(options)
         .then(function(data){
-            console.log('book deleted!');
+            //console.log('book deleted!');
             // update sessionStorage
             let currList=JSON.parse(sessionStorage.getItem('userBooks'));
             for(let i=0;i<currList.length;i++){

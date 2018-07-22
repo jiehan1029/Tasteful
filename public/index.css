@@ -27,10 +27,24 @@
 #lightbox-template-container{
 	padding-left: 0px;
 	padding-right: 0px;
-	width:70vw !important;
+	width:90vw !important;
 }
 
 .lightbox-recipe-details{
 	margin:auto
 
+}
+
+/* override fancybox default setting */
+@media screen and (max-width:700px){
+	.fancybox-content, .lightbox-recipe-details{
+		padding-left:7px;
+		padding-right: 7px;
+	}
+}
+@media screen and (max-width:500px){
+	.fancybox-content,.lightbox-recipe-details{
+		padding-left:0px;
+		padding-right: 0px;
+	}	
 }

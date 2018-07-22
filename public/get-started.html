@@ -45,6 +45,14 @@ footer{
 	color:white;
 }
 
+.introduction a{
+	font-size:2rem;
+	margin-top:20px;
+}
+body{
+	background-color: pink;
+}
+
 </style>
 </head>
 <body>
@@ -57,9 +65,16 @@ footer{
 	<main class='container-fluid'>
 		<section class='col-xs-12 col-md-10 offset-md-1 text-center'>
 			<header>
-				<h2 class='h2'>You have logged out</h2>
+				<h2 class='h2'>Enjoy cooking?</h2>
+				<p class='lead'>Search recipes and create your own recipe book at Tasteful</p>
 			</header>
-			<p>To continue, please return to the <a href='/home'>home page</a>.</p>
+			<div class="introduction">
+				<p>Tasteful is a dedicated app to make cooking easier and more enjoyable</p>
+				<p>You can search from thousands of recipes, and customize your own recipebook</p>			
+				<p>You may register an account, or first try with a test account with <strong>demoUser</strong> and <strong>demoPassword</strong>				
+				<br/>
+				<a href='/home'><button class="btn btn-primary btn-lg">Get started now!</button></a>
+			</div>
 		</section>
 	</main>
 	<footer></footer>

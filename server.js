@@ -14,6 +14,7 @@ const { router: authRouter, localStrategy, jwtStrategy } = require('./routes/aut
 const { router: recipesRouter } = require('./routes/recipes');
 const { router: recipeBooksRouter} = require('./routes/recipe-books');
 const { router: indexRouter} = require('./routes/index');
+const { router: getStartedRouter} = require('./routes/get-started');
 
 const { PORT, DATABASE_URL } = require('./config');
 
@@ -49,8 +50,10 @@ app.engine('hbs',hbs({
 app.set('views',path.join(__dirname,'views'));
 app.set('view engine','hbs');
 
-// serve index page
-app.get('/', indexRouter);
+// serve get-started page
+app.use('/',getStartedRouter);
+// serve home page
+app.use('/home/', indexRouter);
 // to create user account (no credential is needed nor created at this step)
 app.use('/users/', usersRouter);
 // given username & password, create credential (JWT) that can be used to access protected resources in the server, i.e., the '/api/protected' path in this case

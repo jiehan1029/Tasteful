@@ -78,7 +78,6 @@ function GetRecipeInfoFromApi(req,res){
 
   request(options)
     .then(function(data){
-      console.log(data.analyzedInstructions);
       let analyzedInstructions=data.analyzedInstructions;
       const sentData={
               recipeApiId:data.id,

@@ -36,7 +36,6 @@ router.get('/book',(req,res)=>{
   RecipeBooks
     .findById(req.query.bookId)
     .then(book=>{
-      //console.log(book);
       const hbsObj={
         layout:false,
         username:req.cookies.username,
@@ -45,7 +44,6 @@ router.get('/book',(req,res)=>{
         recipesCount:book.recipes.length,
         recipes:book.recipes
       }
-      //console.log(hbsObj);
       res.status(200).render(`recipe-books-book`,hbsObj);
     })
     .catch(err => {

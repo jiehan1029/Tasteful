@@ -30,7 +30,7 @@ $('body').on('click','.card',function(e){
 			type:'inline',
 			opts:{
 				afterShow:function(instance,current){
-					console.info('show recipe details in modal!')
+					//console.info('show recipe details in modal!')
 				}
 			}
 		});
@@ -43,8 +43,8 @@ $('body').on('click','.card-delete-recipe-btn',function(e){
 	e.stopPropagation();
 	const recipeId=$(e.target).closest('.card').attr('data-recipeApiId');
 	const bookId=$(e.target).closest('.recipes-list').attr('data-bookId');
-	console.log(recipeId);
-	console.log(bookId);
+	//console.log(recipeId);
+	//console.log(bookId);
 	// make PUT request to delete recipe from the book
 	const options={
 		type:'PUT',
@@ -59,8 +59,8 @@ $('body').on('click','.card-delete-recipe-btn',function(e){
 	};
 	$.ajax(options)
 		.then(function(updatedBook){
-			console.log(updatedBook);
-			console.log('recipe deleted!');
+			//console.log(updatedBook);
+			//console.log('recipe deleted!');
 			// update recipe count
 			let currCount=parseInt($('.recipe-count').text())-1;
 			$('.recipe-count').text(currCount);

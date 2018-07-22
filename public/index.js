@@ -1,7 +1,7 @@
-let headerTemplate=Handlebars.compile($('#header-template').html());
-let searchTemplate=Handlebars.compile($('#search-template').html());
-let lightboxTemplate=Handlebars.compile($('#lightbox-template').html());
-let sidebarTemplate=Handlebars.compile($('#sidebar-template').html());
+headerTemplate=Handlebars.compile($('#header-template').html());
+searchTemplate=Handlebars.compile($('#search-template').html());
+lightboxTemplate=Handlebars.compile($('#lightbox-template').html());
+sidebarTemplate=Handlebars.compile($('#sidebar-template').html());
 
 $(loadHeader);
 
@@ -18,7 +18,7 @@ $('body').on('click','.loginLink, .sidebar-login-btn', function(e){
 	e.preventDefault();
 	e.stopPropagation();
 	// clear any remainders
-	$('.login-form').find('.remainder').remove();
+	$('#formRemainder').text("");
 	// show div
 	$('#login-modal-container').attr({hidden:false});
 	$.fancybox.open({
@@ -26,7 +26,7 @@ $('body').on('click','.loginLink, .sidebar-login-btn', function(e){
 		type:'inline',
 		opts:{
 			afterShow:function(instance,current){
-				console.info('show login/signup in modal!')
+				//console.info('show login/signup in modal!')
 			}
 		}
 	});		
@@ -51,9 +51,9 @@ $('body').on('click','.loginBtn', function(e){
 
 	$.ajax(options)
 	.then(function(data){
-		console.log('User login succeeded');
+		//console.log('User login succeeded');
 		loadHeader();
-		console.log(data);
+		//console.log(data);
 		sessionStorage.setItem('userBooks', JSON.stringify(data));
 		$.fancybox.close();
 	})
@@ -69,53 +69,59 @@ $('body').on('click','.loginBtn', function(e){
 $('body').on('click','.signupBtn', function(e){
 	e.stopPropagation();
 	e.preventDefault();
-	// call server to create account
-	const options={
-		url:'/users',
-		type:'POST',
-		contentType: "application/json; charset=utf-8",
-		dataType:'json',
-		data:JSON.stringify({
-			"username":$('#loginUsername').val(),
-			"password":$('#loginPassword').val()
-		})
-	};
-	$.ajax(options)
-	.then(function(data){
-		console.log('User registration succeeded');
-		return data;
-	})
-	.then(function(data){
-		// login on server side
-		const options2={
-			url:'/auth/login',
+	// make sure having all form fields filled
+	if($('#loginUsername').val()==="" || $('#loginPassword').val()===""){
+		$('#formRemainder').text('please fill in both username and password');
+	}else{
+		// call server to create account
+		const options={
+			url:'/users',
 			type:'POST',
 			contentType: "application/json; charset=utf-8",
 			dataType:'json',
 			data:JSON.stringify({
-				"username":data.username,
+				"username":$('#loginUsername').val(),
 				"password":$('#loginPassword').val()
-			})						
+			})
 		};
+		$.ajax(options)
+		.then(function(data){
+			//console.log('User registration succeeded');
+			return data;
+		})
+		.then(function(data){
+			// login on server side
+			const options2={
+				url:'/auth/login',
+				type:'POST',
+				contentType: "application/json; charset=utf-8",
+				dataType:'json',
+				data:JSON.stringify({
+					"username":data.username,
+					"password":$('#loginPassword').val()
+				})						
+			};
 
-		$.ajax(options2)
-		.then(function(dataFrLogin){
-			console.log('automatic login succeeded');
-			loadHeader();
-			console.log(dataFrLogin);
-			sessionStorage.setItem('userBooks', JSON.stringify(dataFrLogin));
-			// close modal
-			$.fancybox.close();
+			$.ajax(options2)
+			.then(function(dataFrLogin){
+				//console.log('automatic login succeeded');
+				loadHeader();
+				//console.log(dataFrLogin);
+				sessionStorage.setItem('userBooks', JSON.stringify(dataFrLogin));
+				// close modal
+				$.fancybox.close();
+			})
+			.catch(err=>{
+				console.log(err);
+				$('#formRemainder').text("Internal server error");
+			})
 		})
 		.catch(err=>{
 			console.log(err);
-			$('.login-form').append(`<p class='.remainder'>Internal server error!</p>`);
-		})
-	})
-	.catch(err=>{
-		console.log(err);
-		$('.login-form').append(`<p class='.remainder'>Internal server error!</p>`);
-	});
+			$('#formRemainder').text("Internal server error!");
+		});		
+	}
+
 });
 
 // enable logout 
@@ -128,7 +134,7 @@ $('body').on('click','.logoutLink', function(e){
 	};
 	$.ajax(options)
 		.then((res)=>{
-			console.log(res.message);
+			//console.log(res.message);
 			loadHeader();
 			sessionStorage.removeItem('userBooks');
 		})
@@ -165,13 +171,11 @@ $(watchScroll);
 
 // https://www.sitepoint.com/jquery-infinite-scrolling-demos/
 function watchScroll(){
-	console.log('start watching page scroll');
+	//console.log('start watching page scroll');
 	const win=$(window);
 	win.scroll(function(e){
 		// if reach end of the page
 		if($(document).height()-win.height()==win.scrollTop()){
-			// show loading bar
-			//$('#loading').show();
 			// ajax call, read req data from sessionStorage
 			const searchTerms=JSON.parse(sessionStorage.getItem('formSearchTerms'));
 			const options={
@@ -226,7 +230,7 @@ $('body').on('click','.card',function(e){
 				instruction.name=false;
 			}
 		});
-		console.log(hbsObj);
+		//console.log(hbsObj);
 		let html=lightboxTemplate(hbsObj);
 		$('#lightbox-template-container').html(html);
 	})
@@ -236,7 +240,7 @@ $('body').on('click','.card',function(e){
 			type:'inline',
 			opts:{
 				afterShow:function(instance,current){
-					console.info('show recipe details in modal!')
+					//console.info('show recipe details in modal!')
 				}
 			}
 		});
@@ -295,7 +299,7 @@ $('body').on('click','.add-to-book-btn',function(e){
 
 			$.ajax(options)
 				.then(function(data){
-					console.log(data);
+					//console.log(data);
 					// update sessionStorage
 					let bookList=JSON.parse(sessionStorage.getItem('userBooks'));
 					let newBook={
@@ -331,8 +335,8 @@ $('body').on('click','.add-to-book-btn',function(e){
 		$.ajax(options)
 			.then(function(data){
 				// show remainder (only a few seconds), then hide again
-				console.log('PUT book succeeded')
-				console.log(data);
+				//console.log('PUT book succeeded')
+				//console.log(data);
 				if(data.duplicateMessage){
 					$('.added-remainder').text(data.duplicateMessage);
 				}else{

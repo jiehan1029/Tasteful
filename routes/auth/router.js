@@ -86,7 +86,8 @@ router.get('/logout',(req,res)=>{
 router.get('/logout/protected',(req,res)=>{
   res.clearCookie('username');
   res.clearCookie('jwt');
-  res.sendFile(path.join(__dirname,'../../public','logout-protected.html'));
+  res.redirect('/home');
+  //res.sendFile(path.join(__dirname,'../../public','logout-protected.html'));
 });
 
 module.exports = {router};

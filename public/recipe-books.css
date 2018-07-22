@@ -1,4 +1,7 @@
 /* recipe book styling */
+*{
+	box-sizing: border-box;
+}
 .card{
 	padding:0px;
 }
