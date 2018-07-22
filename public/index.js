@@ -112,13 +112,24 @@ $('body').on('click','.signupBtn', function(e){
 				$.fancybox.close();
 			})
 			.catch(err=>{
-				console.log(err);
-				$('#formRemainder').text("Internal server error");
+				//console.log(err);
+				//console.log(err.responseJSON);
+				if(err.responseJSON.message){
+					$('#formRemainder').text(err.responseJSON.message);
+				}else{
+					$('#formRemainder').text('Internal Server Error');
+				}
 			})
 		})
 		.catch(err=>{
 			console.log(err);
-			$('#formRemainder').text("Internal server error!");
+				//console.log(err);
+				//console.log(err.responseJSON);
+				if(err.responseJSON.message){
+					$('#formRemainder').text(err.responseJSON.message);
+				}else{
+					$('#formRemainder').text('Internal Server Error');
+				}
 		});		
 	}
 
